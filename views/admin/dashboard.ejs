@@ -1,0 +1,163 @@
+<%- include('../partials/header') %>
+
+<!-- Admin Welkom & Logout -->
+<section class="px-6 pt-6 pb-2 flex justify-between items-center">
+  <div>
+    <h1 class="serif-title text-2xl font-bold text-stone-100">Admin Paneel</h1>
+    <p class="text-xs text-stone-400 font-light">Beheer van producten & statistieken</p>
+  </div>
+  <a href="/admin/logout" class="text-xs text-red-400 hover:text-red-300 font-mono tracking-widest uppercase transition bg-red-950/20 border border-red-900/40 px-3 py-1.5 rounded-full">
+    Uitloggen
+  </a>
+</section>
+
+<!-- Hoofd Actie: Nieuwe Bestelling (Perfect voor NFC ontmoetingen!) -->
+<section class="px-6 py-4">
+  <a 
+    href="/admin/orders/new" 
+    class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-4 flex items-center justify-center space-x-2 text-base transition shadow-lg shadow-amber-500/10"
+  >
+    <!-- Shopping Bag Icon -->
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+    </svg>
+    <span>Nieuwe Bestelling Noteren</span>
+  </a>
+</section>
+
+<!-- Statistieken Grid -->
+<section class="px-6 py-2 grid grid-cols-2 gap-4">
+  <!-- Homepage Views -->
+  <div class="bg-stone-900/30 border border-stone-900/60 rounded-3xl p-4.5 space-y-1">
+    <span class="text-[10px] uppercase font-mono font-bold tracking-wider text-stone-500">Homepage Views</span>
+    <div class="text-2xl font-bold text-stone-100 flex items-baseline space-x-1">
+      <span><%= totalViews %></span>
+      <span class="text-xs font-light text-stone-500">bezoeken</span>
+    </div>
+  </div>
+
+  <!-- Abonnees Count -->
+  <div class="bg-stone-900/30 border border-stone-900/60 rounded-3xl p-4.5 space-y-1">
+    <span class="text-[10px] uppercase font-mono font-bold tracking-wider text-stone-500">Abonnees</span>
+    <div class="text-2xl font-bold text-stone-100 flex items-baseline space-x-1">
+      <span><%= subscribers.length %></span>
+      <span class="text-xs font-light text-stone-500">leden</span>
+    </div>
+  </div>
+</section>
+
+<!-- Producten Lijst & Beheer -->
+<section class="px-6 py-4 space-y-4">
+  <div class="flex justify-between items-center">
+    <h2 class="serif-title text-xl font-bold text-stone-100">Producten</h2>
+    <a 
+      href="/admin/products/new" 
+      class="text-xs text-amber-500 hover:text-amber-400 font-mono tracking-wider uppercase transition bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full"
+    >
+      + Toevoegen
+    </a>
+  </div>
+
+  <!-- Product Kaarten Lijst -->
+  <div class="space-y-3">
+    <% if (products.length === 0) { %>
+      <div class="text-center py-8 bg-stone-900/20 border border-stone-850 rounded-2xl">
+        <p class="text-stone-500 text-xs">Nog geen producten.</p>
+      </div>
+    <% } else { %>
+      <% products.forEach(p => { %>
+        <div class="bg-stone-900/30 border border-stone-900/60 rounded-2.5xl p-4 flex items-center justify-between">
+          <div class="space-y-1 flex-grow pr-4">
+            <h3 class="text-sm font-semibold text-stone-200 truncate"><%= p.title %></h3>
+            <div class="flex items-center space-x-3 text-xs text-stone-500 font-light">
+              <span class="text-amber-500/80 font-bold">€<%= parseFloat(p.price).toFixed(2) %></span>
+              <span class="flex items-center">
+                <svg class="w-3.5 h-3.5 mr-0.5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <%= p.views %> views
+              </span>
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <a 
+              href="/admin/products/<%= p.id %>/edit" 
+              class="text-xs bg-stone-800 hover:bg-stone-750 text-stone-300 px-3 py-2 rounded-xl transition"
+            >
+              Bewerk
+            </a>
+            <form action="/admin/products/<%= p.id %>/delete" method="POST" onsubmit="return confirm('Weet je zeker dat je dit product wilt verwijderen?');" class="inline">
+              <button 
+                type="submit" 
+                class="text-xs bg-red-950/30 hover:bg-red-950/50 border border-red-900/40 text-red-400 px-3 py-2 rounded-xl transition"
+              >
+                Wis
+              </button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</section>
+
+<!-- Abonnees Lijst -->
+<section class="px-6 py-4 space-y-4">
+  <div class="flex justify-between items-center">
+    <h2 class="serif-title text-xl font-bold text-stone-100">Nieuwsbrief Abonnees</h2>
+    <% if (subscribers.length > 0) { %>
+      <button 
+        onclick="copyEmails()" 
+        class="text-[10px] text-stone-400 hover:text-stone-200 font-mono tracking-wider uppercase transition bg-stone-850 border border-stone-800 px-2.5 py-1.5 rounded-lg flex items-center space-x-1"
+      >
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+        </svg>
+        <span>Lijst Kopiëren</span>
+      </button>
+    <% } %>
+  </div>
+
+  <div class="bg-stone-900/20 border border-stone-900 rounded-3xl p-4 max-h-60 overflow-y-auto no-scrollbar">
+    <% if (subscribers.length === 0) { %>
+      <p class="text-stone-500 text-xs text-center py-4">Nog geen abonnees aangemeld.</p>
+    <% } else { %>
+      <div class="divide-y divide-stone-900">
+        <% subscribers.forEach(sub => { %>
+          <div class="py-2.5 flex justify-between items-center">
+            <span class="text-xs text-stone-300 font-medium select-all"><%= sub.email %></span>
+            <span class="text-[9px] text-stone-500 font-mono"><%= new Date(sub.created_at).toLocaleDateString('nl-NL') %></span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  function copyEmails() {
+    const emails = [
+      <% subscribers.forEach(sub => { %>
+        '<%= sub.email %>',
+      <% }) %>
+    ];
+    
+    if (emails.length === 0) return;
+    
+    const emailString = emails.join(', ');
+    
+    navigator.clipboard.writeText(emailString)
+      .then(() => {
+        alert('E-mailadressen gekopieerd naar klembord! Je kunt ze nu direct plakken in het BCC veld van je mail.');
+      })
+      .catch(err => {
+        console.error('Fout bij kopiëren:', err);
+        alert('Kopiëren mislukt. Selecteer de e-mails handmatig.');
+      });
+  }
+</script>
+
+<%- include('../partials/footer') %>

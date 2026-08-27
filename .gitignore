@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# Environment variables (Geheime wachtwoorden & database links)
+.env
+
+# Systeembestanden
+.DS_Store
+Thumbs.db

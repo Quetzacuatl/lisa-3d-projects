@@ -1,0 +1,53 @@
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-stone-900 bg-stone-900/20 py-8 px-6 mt-auto">
+    <div class="max-w-md mx-auto text-center space-y-6">
+      
+      <!-- Nieuwsbrief Inschrijving -->
+      <div class="bg-stone-900/40 border border-stone-900/60 rounded-3xl p-6 text-left space-y-4">
+        <h3 class="serif-title text-xl font-semibold text-stone-100">Blijf op de hoogte</h3>
+        <p class="text-xs text-stone-400 leading-relaxed font-light">
+          Schrijf je in voor de nieuwsbrief en ontvang een bericht zodra Lisa nieuwe, unieke prints online zet!
+        </p>
+        <form action="/subscribe" method="POST" class="flex flex-col space-y-2">
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Je e-mailadres" 
+            required 
+            class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+          >
+          <button 
+            type="submit" 
+            class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-3.5 text-sm tracking-wide transition shadow-lg shadow-amber-500/10"
+          >
+            Abonneren
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="flex flex-col items-center justify-center space-y-2 text-stone-600 text-xs">
+        <p>© 2026 Lisa. 3D Studio. Alle rechten voorbehouden.</p>
+        <p class="font-mono text-[9px] uppercase tracking-wider text-stone-700">Handgemaakt met passie</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Toon succes/foutmelding na aanmelden -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('subscribed') === 'true') {
+      alert('Super! Je bent met succes ingeschreven voor updates.');
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    } else if (urlParams.get('subscribed') === 'false') {
+      alert('Er ging iets mis bij het inschrijven. Probeer het nog een keer.');
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  </script>
+</body>
+</html>

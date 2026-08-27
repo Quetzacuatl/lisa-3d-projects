@@ -1,0 +1,40 @@
+<%- include('../partials/header') %>
+
+<section class="px-6 py-12 flex-grow flex flex-col justify-center">
+  <div class="space-y-6 bg-stone-900/30 border border-stone-900/60 rounded-3xl p-6 shadow-xl">
+    
+    <div class="text-center space-y-2">
+      <h2 class="serif-title text-2xl font-bold text-stone-100">Admin Inloggen</h2>
+      <p class="text-xs text-stone-400 font-light">Beveiligde toegang tot Lisa's dashboard</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="bg-red-950/40 border border-red-900/60 text-red-200 text-xs px-4 py-3 rounded-2xl">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form action="/admin/login" method="POST" class="space-y-4">
+      <div class="space-y-1">
+        <label for="password" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Wachtwoord</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Voer het admin wachtwoord in" 
+          required 
+          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+        >
+      </div>
+
+      <button 
+        type="submit" 
+        class="w-full bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold rounded-2xl py-4 text-sm tracking-wide transition active:scale-[0.98] shadow-lg shadow-amber-500/10"
+      >
+        Inloggen
+      </button>
+    </form>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

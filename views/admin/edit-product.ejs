@@ -1,0 +1,209 @@
+<%- include('../partials/header') %>
+
+<section class="px-6 py-6 flex-grow">
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center space-x-3">
+      <a href="/admin" class="text-stone-400 hover:text-stone-200 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </a>
+      <div>
+        <h1 class="serif-title text-2xl font-bold text-stone-100">Product Bewerken</h1>
+        <p class="text-xs text-stone-400 font-light">Wijzig de gegevens of foto's van dit product</p>
+      </div>
+    </div>
+
+    <!-- Formulier -->
+    <form action="/admin/products/<%= product.id %>/edit" method="POST" class="space-y-5 bg-stone-900/30 border border-stone-900/60 rounded-3xl p-6 shadow-xl" onsubmit="return validateForm()">
+      
+      <!-- Titel -->
+      <div class="space-y-1">
+        <label for="title" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Titel</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          value="<%= product.title %>" 
+          placeholder="Bijv. Sleutelhanger Draak" 
+          required 
+          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+        >
+      </div>
+
+      <!-- Prijs -->
+      <div class="space-y-1">
+        <label for="price" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Prijs (€)</label>
+        <input 
+          type="number" 
+          step="0.01" 
+          id="price" 
+          name="price" 
+          value="<%= parseFloat(product.price).toFixed(2) %>" 
+          placeholder="0.00" 
+          required 
+          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+        >
+      </div>
+
+      <!-- Beschrijving -->
+      <div class="space-y-1">
+        <label for="description" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Beschrijving</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="4" 
+          placeholder="Geef details over materiaal, printtijd en opties..." 
+          required 
+          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+        ><%= product.description %></textarea>
+      </div>
+
+      <!-- Video Link (YouTube of TikTok) -->
+      <div class="space-y-1">
+        <label for="video_link" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Video Link (YouTube of TikTok - optioneel)</label>
+        <input 
+          type="url" 
+          id="video_link" 
+          name="video_link" 
+          value="<%= product.video_link || '' %>" 
+          placeholder="https://www.youtube.com/watch?... of TikTok" 
+          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+        >
+      </div>
+
+      <!-- AFBEELDINGEN UPLOAD & OPTIMALISATIE (Met previews) -->
+      <div class="space-y-4 pt-2 border-t border-stone-850">
+        <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Foto's beheren</h3>
+        <p class="text-[10px] text-stone-500 leading-normal">Laat de invoervelden leeg om de bestaande foto's te behouden. Selecteer een nieuw bestand om een foto te vervangen.</p>
+
+        <!-- 1. Voor-aanzicht (Verplicht) -->
+        <div class="space-y-2">
+          <label class="text-xs font-medium text-stone-300">Hoofdafbeelding (Voor-aanzicht)</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            id="file_front" 
+            onchange="handleImageUpload(this, 'image_front', 'preview_front')"
+            class="block w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-800 file:text-stone-200 hover:file:bg-stone-750 transition"
+          >
+          <input type="hidden" id="image_front" name="image_front" value="<%= product.image_front %>">
+          <div class="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-950 border border-stone-850 mt-1" id="wrapper_preview_front">
+            <img id="preview_front" src="<%= product.image_front %>" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <!-- 2. Zij-aanzicht (Optioneel) -->
+        <div class="space-y-2">
+          <label class="text-xs font-medium text-stone-300">Zij-aanzicht (Optioneel)</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            id="file_side" 
+            onchange="handleImageUpload(this, 'image_side', 'preview_side')"
+            class="block w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-800 file:text-stone-200 hover:file:bg-stone-750 transition"
+          >
+          <input type="hidden" id="image_side" name="image_side" value="<%= product.image_side || '' %>">
+          <div class="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-950 border border-stone-850 mt-1 <%= product.image_side ? '' : 'hidden' %>" id="wrapper_preview_side">
+            <img id="preview_side" src="<%= product.image_side || '' %>" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <!-- 3. Achter-aanzicht (Optioneel) -->
+        <div class="space-y-2">
+          <label class="text-xs font-medium text-stone-300">Achter-aanzicht (Optioneel)</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            id="file_back" 
+            onchange="handleImageUpload(this, 'image_back', 'preview_back')"
+            class="block w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-800 file:text-stone-200 hover:file:bg-stone-750 transition"
+          >
+          <input type="hidden" id="image_back" name="image_back" value="<%= product.image_back || '' %>">
+          <div class="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-950 border border-stone-850 mt-1 <%= product.image_back ? '' : 'hidden' %>" id="wrapper_preview_back">
+            <img id="preview_back" src="<%= product.image_back || '' %>" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Knop -->
+      <button 
+        type="submit" 
+        id="submit-btn"
+        class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-4 text-sm tracking-wide transition shadow-lg shadow-amber-500/10"
+      >
+        Wijzigingen Opslaan
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- Client-side script voor afbeeldingsoptimalisatie -->
+<script>
+  function handleImageUpload(inputElement, hiddenInputId, previewImgId) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Foto optimaliseren...";
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = function() {
+        // Canvas aanmaken voor resizing
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Omzetten naar gecomprimeerde JPEG (kwaliteit 0.85)
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+        // Waarden toewijzen en preview tonen
+        document.getElementById(hiddenInputId).value = compressedBase64;
+        
+        const previewImg = document.getElementById(previewImgId);
+        previewImg.src = compressedBase64;
+        document.getElementById('wrapper_' + previewImgId).classList.remove('hidden');
+
+        // Knop weer activeren
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Wijzigingen Opslaan";
+      };
+    };
+  }
+
+  function validateForm() {
+    const imageFront = document.getElementById('image_front').value;
+    if (!imageFront) {
+      alert("Er moet een hoofdafbeelding (voor-aanzicht) aanwezig zijn.");
+      return false;
+    }
+    return true;
+  }
+</script>
+
+<%- include('../partials/footer') %>
