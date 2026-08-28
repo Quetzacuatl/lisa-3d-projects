@@ -120,65 +120,114 @@
           <p class="text-sm text-stone-600 leading-relaxed font-normal whitespace-pre-line"><%= post.content %></p>
         </div>
 
-        <!-- Elegant Carousel voor Blogfoto's (Max. 3) -->
-        <% if (post.image || post.image_2 || post.image_3) { %>
-          <% 
-            let images = [post.image, post.image_2, post.image_3].filter(img => img && img !== 'null' && img !== 'undefined' && img.trim() !== '' && img.length > 30);
-          %>
-          <% if (images.length > 0) { %>
-            <div class="relative group mt-4">
-              <!-- Scroll Container -->
-              <div 
-                id="carousel-<%= post.id %>" 
-                class="flex overflow-x-auto scrollbar-none snap-x snap-mandatory rounded-2xl border border-rose-100/40 shadow-sm bg-stone-50"
-                style="scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;"
-                onscroll="updateCarouselDots(<%= post.id %>, this)"
-              >
-                <% images.forEach((imgUrl, index) => { %>
-                  <div class="w-full shrink-0 snap-start snap-always aspect-square md:aspect-video relative">
-                    <img src="<%= imgUrl %>" alt="<%= post.title %> - <%= index + 1 %>" class="w-full h-full object-cover">
-                  </div>
+        <!-- Elegant Carousel voor Blogfoto's & Video's -->
+        <% 
+          let blogMedia = [];
+          if (post.media_items) {
+            try {
+              blogMedia = JSON.parse(post.media_items);
+            } catch(e) {
+              console.error("Fout bij parsen blog media_items:", e);
+            }
+          }
+          // Fallback naar legacy kolommen
+          if (blogMedia.length === 0) {
+            let legacyImages = [post.image, post.image_2, post.image_3].filter(img => img && img !== 'null' && img !== 'undefined' && img.trim() !== '' && img.length > 30);
+            legacyImages.forEach(imgUrl => {
+              blogMedia.push({ type: 'image', url: imgUrl });
+            });
+          }
+        %>
+
+        <% if (blogMedia.length > 0) { %>
+          <div class="relative group mt-4">
+            <!-- Scroll Container -->
+            <div 
+              id="carousel-<%= post.id %>" 
+              class="flex overflow-x-auto scrollbar-none snap-x snap-mandatory rounded-2xl border border-rose-100/40 shadow-sm bg-stone-50"
+              style="scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;"
+              onscroll="updateCarouselDots(<%= post.id %>, this)"
+            >
+              <% blogMedia.forEach((item, index) => { %>
+                <div class="w-full shrink-0 snap-start snap-always aspect-square md:aspect-video relative overflow-hidden bg-stone-100">
+                  <% if (item.type === 'image') { %>
+                    <img src="<%= item.url %>" alt="<%= post.title %> - <%= index + 1 %>" class="w-full h-full object-cover">
+                  <% } else if (item.type === 'video') { %>
+                    <video src="<%= item.url %>" loop muted playsinline controls class="w-full h-full object-cover blog-auto-video"></video>
+                  <% } else if (item.type === 'video_link') { %>
+                    <% 
+                      // Youtube/TikTok embed urls bepalen
+                      let ytEmbedUrl = null;
+                      let ttEmbedUrl = null;
+                      
+                      const ytMatch = item.url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+                      if (ytMatch && ytMatch[2].length === 11) {
+                        ytEmbedUrl = "https://www.youtube.com/embed/" + ytMatch[2] + "?enablejsapi=1&mute=1&loop=1&playlist=" + ytMatch[2];
+                      }
+                      
+                      const ttMatch = item.url.match(/\/video\/(\d+)/);
+                      if (ttMatch) {
+                        ttEmbedUrl = "https://www.tiktok.com/embed/v2/" + ttMatch[1];
+                      }
+                    %>
+                    <% if (ytEmbedUrl) { %>
+                      <iframe src="<%= ytEmbedUrl %>" class="w-full h-full object-cover blog-auto-iframe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <% } else if (ttEmbedUrl) { %>
+                      <iframe src="<%= ttEmbedUrl %>" class="w-full h-full object-cover blog-auto-iframe" frameborder="0" allowfullscreen></iframe>
+                    <% } else { %>
+                      <!-- Fallback knop naar link -->
+                      <div class="w-full h-full bg-stone-50 flex flex-col items-center justify-center p-6 text-center space-y-3">
+                        <svg class="w-10 h-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-[10px] text-stone-600 font-medium">Klik hieronder om de video te bekijken:</p>
+                        <a href="<%= item.url %>" target="_blank" class="bg-rose-500 hover:bg-rose-600 text-white font-bold text-[10px] py-1.5 px-4 rounded-full transition shadow-md shadow-rose-500/10">Bekijk Video 🎥</a>
+                      </div>
+                    <% } %>
+                  <% } %>
+                </div>
+              <% }) %>
+            </div>
+
+            <!-- Carousel Dots Indicator (Alleen bij meer dan 1 item) -->
+            <% if (blogMedia.length > 1) { %>
+              <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5 bg-black/25 backdrop-blur-[2px] px-2.5 py-1 rounded-full z-10">
+                <% blogMedia.forEach((_, index) => { %>
+                  <button 
+                    type="button"
+                    onclick="scrollToCarouselSlide(<%= post.id %>, <%= index %>)"
+                    id="dot-<%= post.id %>-<%= index %>"
+                    class="w-1.5 h-1.5 rounded-full transition-all duration-300 <%= index === 0 ? 'bg-white scale-110' : 'bg-white/45 hover:bg-white/75' %>"
+                    aria-label="Ga naar item <%= index + 1 %>"
+                  ></button>
                 <% }) %>
               </div>
 
-              <!-- Carousel Dots Indicator (Alleen bij meer dan 1 foto) -->
-              <% if (images.length > 1) { %>
-                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5 bg-black/25 backdrop-blur-[2px] px-2.5 py-1 rounded-full z-10">
-                  <% images.forEach((_, index) => { %>
-                    <button 
-                      type="button"
-                      onclick="scrollToCarouselSlide(<%= post.id %>, <%= index %>)"
-                      id="dot-<%= post.id %>-<%= index %>"
-                      class="w-1.5 h-1.5 rounded-full transition-all duration-300 <%= index === 0 ? 'bg-white scale-110' : 'bg-white/45 hover:bg-white/75' %>"
-                      aria-label="Ga naar foto <%= index + 1 %>"
-                    ></button>
-                  <% }) %>
-                </div>
-
-                <!-- Navigatie Pijlen (Alleen zichtbaar op desktop bij hover) -->
-                <button 
-                  type="button" 
-                  onclick="scrollCarouselPrev(<%= post.id %>)"
-                  class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-800 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 active:scale-90"
-                  aria-label="Vorige foto"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button 
-                  type="button" 
-                  onclick="scrollCarouselNext(<%= post.id %>, <%= images.length %>)"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-800 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 active:scale-90"
-                  aria-label="Volgende foto"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              <% } %>
-            </div>
-          <% } %>
+              <!-- Navigatie Pijlen (Alleen zichtbaar op desktop bij hover) -->
+              <button 
+                type="button" 
+                onclick="scrollCarouselPrev(<%= post.id %>)"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-800 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 active:scale-90"
+                aria-label="Vorige item"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button 
+                type="button" 
+                onclick="scrollCarouselNext(<%= post.id %>, <%= blogMedia.length %>)"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-800 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 active:scale-90"
+                aria-label="Volgende item"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            <% } %>
+          </div>
+        <% } %>
         <% } %>
 
         <!-- Footer Interactions (Hearts) -->
@@ -273,6 +322,21 @@
       if (likedBlogs.includes(blogId)) {
         btn.querySelector('.heart-icon').classList.add('fill-rose-500', 'text-rose-500');
       }
+    });
+
+    // 🎥 AUTOMATISCH AFSPELEN VAN FILMPJES ALS ZE IN FOCUS KOMEN
+    const autoPlayObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.play().catch(err => console.log("Autoplay geblokkeerd door browser:", err));
+        } else {
+          entry.target.pause();
+        }
+      });
+    }, { threshold: 0.6 }); // Speelt af wanneer minimaal 60% in beeld is
+
+    document.querySelectorAll('.blog-auto-video').forEach(video => {
+      autoPlayObserver.observe(video);
     });
   });
 
