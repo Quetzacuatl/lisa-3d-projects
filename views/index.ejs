@@ -160,14 +160,16 @@
                       let ytEmbedUrl = null;
                       let ttEmbedUrl = null;
                       
-                      const ytMatch = item.url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
-                      if (ytMatch && ytMatch[2].length === 11) {
-                        ytEmbedUrl = "https://www.youtube.com/embed/" + ytMatch[2] + "?enablejsapi=1&mute=1&loop=1&playlist=" + ytMatch[2];
-                      }
-                      
-                      const ttMatch = item.url.match(/\/video\/(\d+)/);
-                      if (ttMatch) {
-                        ttEmbedUrl = "https://www.tiktok.com/embed/v2/" + ttMatch[1];
+                      if (item.url) {
+                        const ytMatch = item.url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+                        if (ytMatch && ytMatch[2] && ytMatch[2].length === 11) {
+                          ytEmbedUrl = "https://www.youtube.com/embed/" + ytMatch[2] + "?enablejsapi=1&mute=1&loop=1&playlist=" + ytMatch[2];
+                        }
+                        
+                        const ttMatch = item.url.match(/\/video\/(\d+)/);
+                        if (ttMatch) {
+                          ttEmbedUrl = "https://www.tiktok.com/embed/v2/" + ttMatch[1];
+                        }
                       }
                     %>
                     <% if (ytEmbedUrl) { %>
@@ -227,7 +229,6 @@
               </button>
             <% } %>
           </div>
-        <% } %>
         <% } %>
 
         <!-- Footer Interactions (Hearts) -->
