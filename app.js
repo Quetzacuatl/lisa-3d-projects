@@ -36,7 +36,7 @@ function getEmbedUrl(url) {
   if (!url) return null;
   
   // YouTube watch link
-  const ytRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const ytRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
   const ytMatch = url.match(ytRegex);
   if (ytMatch && ytMatch[2].length === 11) {
     return { type: 'youtube', url: `https://www.youtube.com/embed/${ytMatch[2]}` };
