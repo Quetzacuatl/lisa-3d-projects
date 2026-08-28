@@ -1,29 +1,56 @@
 <%- include('partials/header') %>
 
+<style>
+  /* Verberg scrollbars voor carrousels op alle browsers */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
 <!-- Introductie -->
 <section class="px-6 pt-6 pb-4">
   <div class="space-y-2">
-    <h1 class="serif-title text-3xl font-extrabold tracking-tight text-stone-100">
-      Mijn 3D Prints <span class="text-amber-500 font-sans font-light">&</span> Creaties
+    <h1 class="serif-title text-3xl font-extrabold tracking-tight text-stone-900 leading-tight">
+      Mijn 3D Prints <span class="text-rose-500 font-sans font-light animate-pulse">&</span> Creaties
     </h1>
-    <p class="text-xs text-stone-400 leading-relaxed font-light">
-      Welkom in mijn digitale studio. Scan mijn NFC sleutelhanger, blader door de producten en laat me weten wat je wilt bestellen! Tik op een product voor details en aanzichten.
+    <p class="text-xs text-stone-500 leading-relaxed font-light">
+      Welkom in mijn digitale studio! Blader door mijn prints, lees mee in mijn dagboek of scan mijn NFC-sleutelhanger. Klik op een print voor details en aanzichten!
     </p>
   </div>
 </section>
 
-<!-- Producten Grid (2 kolommen op mobiel, zeer compact en stijlvol) -->
-<section class="px-6 py-4 flex-grow">
+<!-- 🌸 TAB SELECTOR (Snel wisselen tussen Prints en Dagboek) -->
+<div class="px-6 py-2">
+  <div class="bg-rose-100/30 border border-rose-100/50 p-1.5 rounded-[20px] flex items-center">
+    <button 
+      id="tab-products-btn"
+      onclick="switchTab('products')"
+      class="w-1/2 text-center py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-1.5 bg-white text-stone-900 shadow-sm"
+    >
+      <span>🛍️</span> <span>Mijn Prints</span>
+    </button>
+    <button 
+      id="tab-blog-btn"
+      onclick="switchTab('blog')"
+      class="w-1/2 text-center py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-1.5 text-stone-500 hover:text-stone-800"
+    >
+      <span>✨</span> <span>Mijn Dagboek</span>
+    </button>
+  </div>
+</div>
+
+<!-- 🛍️ SECTIE 1: PRODUCTEN (PRINTS) GRID -->
+<section id="section-products" class="px-6 py-4 flex-grow">
   <% if (products.length === 0) { %>
-    <div class="text-center py-16 bg-stone-900/20 border border-dashed border-stone-850 rounded-3xl">
-      <p class="text-stone-500 text-sm">Nog geen producten toegevoegd.</p>
+    <div class="text-center py-16 bg-white/50 border border-dashed border-rose-200/60 rounded-[2rem] shadow-sm">
+      <p class="text-stone-400 text-sm font-light">Nog geen producten toegevoegd.</p>
     </div>
   <% } else { %>
     <div class="grid grid-cols-2 gap-4">
       <% products.forEach(product => { %>
         <!-- Product Kaart -->
         <div 
-          class="group bg-stone-900/30 border border-stone-900/60 rounded-3xl overflow-hidden cursor-pointer hover:border-stone-800 transition active:scale-[0.98]"
+          class="group bg-white/70 border border-rose-100/40 rounded-[2rem] overflow-hidden cursor-pointer hover:border-rose-200 hover:shadow-md transition duration-300 active:scale-[0.98]"
           onclick="openProductSheet(<%= JSON.stringify({
             id: product.id,
             title: product.title,
@@ -32,11 +59,12 @@
             image_front: product.image_front,
             image_side: product.image_side,
             image_back: product.image_back,
-            videoData: product.videoData
+            videoData: product.videoData,
+            views: product.views
           }) %>)"
         >
           <!-- Hoofdafbeelding -->
-          <div class="aspect-square bg-stone-950 overflow-hidden relative">
+          <div class="aspect-square bg-stone-50 overflow-hidden relative">
             <img 
               src="<%= product.image_front %>" 
               alt="<%= product.title %>" 
@@ -47,17 +75,17 @@
           
           <!-- Info -->
           <div class="p-3.5 space-y-1">
-            <h3 class="text-xs font-semibold text-stone-200 truncate group-hover:text-stone-100 transition">
+            <h3 class="text-xs font-bold text-stone-800 truncate group-hover:text-rose-500 transition">
               <%= product.title %>
             </h3>
             <div class="flex justify-between items-center">
-              <span class="text-xs font-bold text-amber-500">
-                €<%= parseFloat(product.price).toFixed(2) %>
+              <span class="text-[9px] uppercase tracking-wider text-stone-400 font-mono">
+                3D PRINT
               </span>
-              <span class="text-[9px] text-stone-500 font-mono flex items-center">
-                <svg class="w-2.5 h-2.5 mr-0.5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              <span class="text-[10px] text-rose-500 bg-rose-50 border border-rose-100/30 font-mono font-bold flex items-center px-2 py-0.5 rounded-full shadow-sm">
+                <svg class="w-3 h-3 mr-0.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
                 <%= product.views %>
               </span>
@@ -69,6 +97,112 @@
   <% } %>
 </section>
 
+<!-- ✨ SECTIE 2: LISA'S DAGBOEK (BLOGS) -->
+<section id="section-blog" class="px-6 py-4 flex-grow hidden space-y-6 max-w-4xl mx-auto">
+  <% if (blogPosts.length === 0) { %>
+    <div class="text-center py-16 bg-white/50 border border-dashed border-rose-200/60 rounded-[2rem] shadow-sm space-y-2">
+      <p class="text-stone-400 text-sm font-light">Mijn dagboek is nog leeg...</p>
+      <p class="text-[10px] text-stone-400 font-light">Ik post hier binnenkort mijn eerste printavontuur! 🛠️</p>
+    </div>
+  <% } else { %>
+    <% blogPosts.forEach(post => { %>
+      <!-- Blog Card -->
+      <div class="bg-white/80 border border-rose-100/50 rounded-[2.5rem] p-6 md:p-8 shadow-sm space-y-5 hover:shadow-md transition duration-300">
+        <!-- Date Header -->
+        <div class="flex items-center justify-between text-[10px] text-stone-400 font-mono">
+          <span class="bg-rose-50 text-rose-500 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Project Story</span>
+          <span><%= new Date(post.created_at).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+        </div>
+
+        <!-- Title & Content -->
+        <div class="space-y-2">
+          <h2 class="serif-title text-xl md:text-2xl font-bold text-stone-900 leading-snug"><%= post.title %></h2>
+          <p class="text-sm text-stone-600 leading-relaxed font-normal whitespace-pre-line"><%= post.content %></p>
+        </div>
+
+        <!-- Elegant Carousel voor Blogfoto's (Max. 3) -->
+        <% if (post.image || post.image_2 || post.image_3) { %>
+          <% 
+            let images = [post.image, post.image_2, post.image_3].filter(img => img && img !== 'null' && img !== 'undefined' && img.trim() !== '' && img.length > 30);
+          %>
+          <% if (images.length > 0) { %>
+            <div class="relative group mt-4">
+              <!-- Scroll Container -->
+              <div 
+                id="carousel-<%= post.id %>" 
+                class="flex overflow-x-auto scrollbar-none snap-x snap-mandatory rounded-2xl border border-rose-100/40 shadow-sm bg-stone-50"
+                style="scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;"
+                onscroll="updateCarouselDots(<%= post.id %>, this)"
+              >
+                <% images.forEach((imgUrl, index) => { %>
+                  <div class="w-full shrink-0 snap-start snap-always aspect-square md:aspect-video relative">
+                    <img src="<%= imgUrl %>" alt="<%= post.title %> - <%= index + 1 %>" class="w-full h-full object-cover">
+                  </div>
+                <% }) %>
+              </div>
+
+              <!-- Carousel Dots Indicator (Alleen bij meer dan 1 foto) -->
+              <% if (images.length > 1) { %>
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1.5 bg-black/25 backdrop-blur-[2px] px-2.5 py-1 rounded-full z-10">
+                  <% images.forEach((_, index) => { %>
+                    <button 
+                      type="button"
+                      onclick="scrollToCarouselSlide(<%= post.id %>, <%= index %>)"
+                      id="dot-<%= post.id %>-<%= index %>"
+                      class="w-1.5 h-1.5 rounded-full transition-all duration-300 <%= index === 0 ? 'bg-white scale-110' : 'bg-white/45 hover:bg-white/75' %>"
+                      aria-label="Ga naar foto <%= index + 1 %>"
+                    ></button>
+                  <% }) %>
+                </div>
+
+                <!-- Navigatie Pijlen (Alleen zichtbaar op desktop bij hover) -->
+                <button 
+                  type="button" 
+                  onclick="scrollCarouselPrev(<%= post.id %>)"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-800 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 active:scale-90"
+                  aria-label="Vorige foto"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="scrollCarouselNext(<%= post.id %>, <%= images.length %>)"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-stone-800 shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 active:scale-90"
+                  aria-label="Volgende foto"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              <% } %>
+            </div>
+          <% } %>
+        <% } %>
+
+        <!-- Footer Interactions (Hearts) -->
+        <div class="pt-4 border-t border-rose-100/40 flex items-center justify-between">
+          <span class="text-[10px] md:text-xs text-stone-400 font-light">Vind je dit een leuk project? Geef een hartje!</span>
+          
+          <button 
+            type="button" 
+            onclick="likeBlogPost(<%= post.id %>, this)"
+            class="like-btn flex items-center space-x-1.5 bg-rose-50 hover:bg-rose-100/60 text-rose-500 px-5 py-2.5 rounded-full border border-rose-100/30 transition-all duration-300 active:scale-95"
+            data-blog-id="<%= post.id %>"
+          >
+            <!-- Heart SVG -->
+            <svg class="heart-icon w-4 h-4 fill-none stroke-rose-500 stroke-[2.5] transition-all duration-300" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span class="likes-count text-xs font-bold font-mono"><%= post.likes %></span>
+          </button>
+        </div>
+      </div>
+    <% }) %>
+  <% } %>
+</section>
+
 <!-- ---------------------------------------------------- -->
 <!-- 📱 MOBILE BOTTOM SHEET / DRAWER (iOS & Android look) -->
 <!-- ---------------------------------------------------- -->
@@ -76,103 +210,52 @@
 <!-- Achtergrond overlay -->
 <div 
   id="sheet-backdrop" 
-  class="fixed inset-0 bg-black/75 opacity-0 pointer-events-none transition-opacity duration-300 z-40"
+  class="fixed inset-0 bg-stone-900/40 opacity-0 pointer-events-none transition-opacity duration-300 z-40"
   onclick="closeProductSheet()"
 ></div>
 
 <!-- Bottom Drawer -->
 <div 
   id="product-sheet" 
-  class="fixed inset-x-0 bottom-0 max-w-md mx-auto bg-stone-900 border-t border-stone-850 rounded-t-[2.5rem] transform translate-y-full transition-transform duration-300 ease-out z-50 overflow-y-auto no-scrollbar max-h-[88vh] flex flex-col shadow-2xl"
+  class="fixed inset-x-0 bottom-0 max-w-md mx-auto bg-[#fdfdfb] border-t border-rose-100 rounded-t-[2.5rem] transform translate-y-full transition-transform duration-300 ease-out z-50 overflow-y-auto no-scrollbar max-h-[88vh] flex flex-col shadow-2xl"
 >
   <!-- Drag Indicator -->
-  <div class="w-12 h-1 bg-stone-800 rounded-full mx-auto my-3 flex-shrink-0 cursor-pointer" onclick="closeProductSheet()"></div>
+  <div class="w-12 h-1 bg-stone-300 rounded-full mx-auto my-3 flex-shrink-0 cursor-pointer" onclick="closeProductSheet()"></div>
 
   <!-- Content Container -->
   <div class="px-6 pb-8 flex-grow space-y-6">
     
-    <!-- Fotogalerij (Swipe-vriendelijke weergave) -->
+    <!-- Fotogalerij -->
     <div class="space-y-3">
-      <div class="aspect-square w-full rounded-2xl overflow-hidden bg-stone-950 relative border border-stone-850">
-        <img 
-          id="sheet-main-img" 
-          src="" 
-          alt="Product details" 
-          class="w-full h-full object-cover transition duration-300"
-        >
+      <div id="sheet-viewport-container" class="aspect-square w-full rounded-[2rem] overflow-hidden bg-stone-50 relative border border-rose-100/40 shadow-inner">
+        <!-- Dynamisch ingeladen afbeelding of video -->
       </div>
       
-      <!-- Thumbnails Selector -->
-      <div id="sheet-thumbnails" class="grid grid-cols-3 gap-2">
-        <button 
-          id="thumb-front" 
-          onclick="selectImage('front')" 
-          class="aspect-square rounded-xl overflow-hidden border-2 border-amber-500 bg-stone-950 p-0.5 active:scale-95 transition"
-        >
-          <img src="" class="w-full h-full object-cover rounded-lg">
-          <span class="block text-[8px] text-center text-stone-400 mt-0.5">Voor</span>
-        </button>
-        <button 
-          id="thumb-side" 
-          onclick="selectImage('side')" 
-          class="aspect-square rounded-xl overflow-hidden border border-stone-800 bg-stone-950 p-0.5 active:scale-95 transition"
-        >
-          <img src="" class="w-full h-full object-cover rounded-lg">
-          <span class="block text-[8px] text-center text-stone-400 mt-0.5">Zij</span>
-        </button>
-        <button 
-          id="thumb-back" 
-          onclick="selectImage('back')" 
-          class="aspect-square rounded-xl overflow-hidden border border-stone-800 bg-stone-950 p-0.5 active:scale-95 transition"
-        >
-          <img src="" class="w-full h-full object-cover rounded-lg">
-          <span class="block text-[8px] text-center text-stone-400 mt-0.5">Achter</span>
-        </button>
+      <!-- Thumbnails Selector (Alleen zichtbaar als er meer dan 1 item is) -->
+      <div id="sheet-thumbnails" class="flex overflow-x-auto gap-2 pb-1.5 scrollbar-none">
+        <!-- Dynamisch gevuld met knoppen -->
       </div>
     </div>
 
     <!-- Details -->
     <div class="space-y-2">
-      <div class="flex justify-between items-start">
-        <h2 id="sheet-title" class="serif-title text-2xl font-bold text-stone-100 leading-tight"></h2>
-        <span id="sheet-price" class="text-xl font-bold text-amber-500 whitespace-nowrap"></span>
-      </div>
-      <p id="sheet-desc" class="text-sm text-stone-400 font-light leading-relaxed whitespace-pre-line"></p>
-    </div>
-
-    <!-- Video Sectie -->
-    <div id="sheet-video-container" class="hidden space-y-2">
-      <h3 class="text-xs uppercase tracking-wider text-stone-500 font-mono font-bold">Video demonstratie</h3>
-      
-      <!-- YouTube Embed Iframe -->
-      <div id="yt-embed" class="hidden aspect-video rounded-xl overflow-hidden bg-black border border-stone-800">
-        <iframe src="" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-
-      <!-- TikTok Link Button -->
-      <a 
-        id="tiktok-btn" 
-        href="" 
-        target="_blank" 
-        class="hidden w-full bg-stone-950 hover:bg-stone-900 border border-stone-850 rounded-2xl py-3.5 px-4 flex items-center justify-between text-stone-200 text-sm transition"
-      >
-        <div class="flex items-center space-x-2">
-          <!-- TikTok SVG Icon -->
-          <svg class="w-4 h-4 text-stone-100" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.95-1.72-.1-.09-.17-.18-.26-.28v5.88c.04 2.1-.55 4.23-1.85 5.85-1.37 1.74-3.54 2.82-5.77 2.99-2.3.18-4.71-.56-6.42-2.14C2.39 18.91 1.34 16.5 1.35 14c-.06-2.45.92-4.91 2.67-6.61 1.71-1.68 4.14-2.51 6.52-2.31.02 1.45.01 2.9.02 4.35-1.28-.21-2.67.14-3.64 1.01-.98.86-1.42 2.23-1.21 3.49.2 1.22.99 2.34 2.08 2.88 1.17.6 2.63.53 3.73-.2 1.05-.7 1.59-1.95 1.57-3.21.02-4.48.01-8.96.02-13.43-.01.03-.02.05-.02.07z"/>
+      <div class="flex justify-between items-start space-x-2">
+        <h2 id="sheet-title" class="serif-title text-2xl font-bold text-stone-900 leading-tight"></h2>
+        <span id="sheet-views" class="text-xs text-rose-500 bg-rose-50 border border-rose-100/30 font-mono font-bold flex items-center px-3 py-1.5 rounded-full whitespace-nowrap shadow-sm">
+          <svg class="w-3.5 h-3.5 mr-1 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
-          <span class="font-medium">Bekijk video op TikTok</span>
-        </div>
-        <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-        </svg>
-      </a>
+          <span id="sheet-views-count">0</span>
+        </span>
+      </div>
+      <p id="sheet-desc" class="text-xs text-stone-500 font-light leading-relaxed whitespace-pre-line"></p>
     </div>
 
     <!-- Sluit Knop voor Mobiel -->
     <button 
       onclick="closeProductSheet()" 
-      class="w-full bg-stone-850 hover:bg-stone-800 text-stone-200 font-semibold rounded-2xl py-4 text-sm tracking-wide transition active:scale-[0.98]"
+      class="w-full bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold rounded-2xl py-4 text-sm tracking-wide transition active:scale-[0.98]"
     >
       Sluiten
     </button>
@@ -182,65 +265,217 @@
 <script>
   let activeProduct = null;
 
+  // Initializeer reeds gelikete blogs en zet de hartjes roze
+  window.addEventListener('DOMContentLoaded', () => {
+    const likedBlogs = JSON.parse(localStorage.getItem('lisa_liked_blogs') || '[]');
+    document.querySelectorAll('.like-btn').forEach(btn => {
+      const blogId = parseInt(btn.getAttribute('data-blog-id'));
+      if (likedBlogs.includes(blogId)) {
+        btn.querySelector('.heart-icon').classList.add('fill-rose-500', 'text-rose-500');
+      }
+    });
+  });
+
+  // 🌸 TABS SWITCHER LOGIC
+  function switchTab(tab) {
+    const productsBtn = document.getElementById('tab-products-btn');
+    const blogBtn = document.getElementById('tab-blog-btn');
+    const productsSection = document.getElementById('section-products');
+    const blogSection = document.getElementById('section-blog');
+
+    if (tab === 'products') {
+      // Button states
+      productsBtn.className = "w-1/2 text-center py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-1.5 bg-white text-stone-900 shadow-sm";
+      blogBtn.className = "w-1/2 text-center py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-1.5 text-stone-500 hover:text-stone-800";
+      
+      // Section states
+      productsSection.classList.remove('hidden');
+      blogSection.classList.add('hidden');
+    } else {
+      // Button states
+      productsBtn.className = "w-1/2 text-center py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-1.5 text-stone-500 hover:text-stone-800";
+      blogBtn.className = "w-1/2 text-center py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-1.5 bg-white text-stone-900 shadow-sm";
+      
+      // Section states
+      productsSection.classList.add('hidden');
+      blogSection.classList.remove('hidden');
+    }
+  }
+
+  // ❤️ AJAX BLOG HEART/LIKE LOGIC
+  async function likeBlogPost(blogId, btnElement) {
+    const likedBlogs = JSON.parse(localStorage.getItem('lisa_liked_blogs') || '[]');
+    
+    // Al geliket? Dan weer weghalen is optioneel, maar we houden het simpel: eenmalig
+    if (likedBlogs.includes(blogId)) {
+      alert('Je hebt dit bericht al een hartje gegeven! ❤️');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/blog/${blogId}/like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Increment de teller
+        btnElement.querySelector('.likes-count').innerText = result.likes;
+        
+        // Voeg animatie en roze kleur toe
+        const heart = btnElement.querySelector('.heart-icon');
+        heart.classList.add('fill-rose-500', 'text-rose-500', 'scale-125');
+        setTimeout(() => heart.classList.remove('scale-125'), 300);
+
+        // Opslaan in localStorage zodat men maar 1x kan liken lokaal
+        likedBlogs.push(blogId);
+        localStorage.setItem('lisa_liked_blogs', JSON.stringify(likedBlogs));
+      }
+    } catch (err) {
+      console.error("Fout bij liken blog:", err);
+    }
+  }
+
+  // 📸 BLOG CAROUSEL LOGIC
+  function scrollToCarouselSlide(postId, index) {
+    const container = document.getElementById(`carousel-${postId}`);
+    if (!container) return;
+    const slideWidth = container.offsetWidth;
+    container.scrollTo({
+      left: slideWidth * index,
+      behavior: 'smooth'
+    });
+  }
+
+  function scrollCarouselPrev(postId) {
+    const container = document.getElementById(`carousel-${postId}`);
+    if (!container) return;
+    const slideWidth = container.offsetWidth;
+    const currentSlide = Math.round(container.scrollLeft / slideWidth);
+    if (currentSlide > 0) {
+      container.scrollTo({
+        left: slideWidth * (currentSlide - 1),
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function scrollCarouselNext(postId, total) {
+    const container = document.getElementById(`carousel-${postId}`);
+    if (!container) return;
+    const slideWidth = container.offsetWidth;
+    const currentSlide = Math.round(container.scrollLeft / slideWidth);
+    if (currentSlide < total - 1) {
+      container.scrollTo({
+        left: slideWidth * (currentSlide + 1),
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function updateCarouselDots(postId, container) {
+    const slideWidth = container.offsetWidth;
+    if (slideWidth === 0) return;
+    const activeIndex = Math.round(container.scrollLeft / slideWidth);
+    
+    // Zoek alle bolletjes voor dit specifieke blogbericht
+    const dots = container.parentElement.querySelectorAll(`[id^="dot-${postId}-"]`);
+    dots.forEach((dot, index) => {
+      if (index === activeIndex) {
+        dot.className = "w-1.5 h-1.5 rounded-full transition-all duration-300 bg-white scale-110";
+      } else {
+        dot.className = "w-1.5 h-1.5 rounded-full transition-all duration-300 bg-white/45 hover:bg-white/75";
+      }
+    });
+  }
+
+  // Hulpfunctie om te checken of een afbeelding echt een geldige Base64 of URL is
+  function isValidImage(img) {
+    return img && img !== 'null' && img !== 'undefined' && img.trim() !== '' && img.length > 30;
+  }
+
+  // 🛍️ BOTTOM SHEET LOGIC
+  let activeProductMedia = [];
+  let activeMediaIndex = 0;
+
   function openProductSheet(product) {
     activeProduct = product;
     
     // Inhoud vullen
     document.getElementById('sheet-title').innerText = product.title;
-    document.getElementById('sheet-price').innerText = `€${parseFloat(product.price).toFixed(2)}`;
     document.getElementById('sheet-desc').innerText = product.description;
+    document.getElementById('sheet-views-count').innerText = product.views || 0;
     
-    // Galerij instellen
-    document.getElementById('sheet-main-img').src = product.image_front;
-    
-    // Thumbnail 1 (Front)
-    const thumbFront = document.getElementById('thumb-front');
-    thumbFront.querySelector('img').src = product.image_front;
-    
-    // Thumbnail 2 (Side)
-    const thumbSide = document.getElementById('thumb-side');
-    if (product.image_side) {
-      thumbSide.classList.remove('hidden');
-      thumbSide.querySelector('img').src = product.image_side;
-    } else {
-      thumbSide.classList.add('hidden');
+    // Media-items voorbereiden (backwards compatible)
+    activeProductMedia = [];
+    if (product.media_items) {
+      try {
+        activeProductMedia = JSON.parse(product.media_items);
+      } catch (e) {
+        console.error("Fout bij laden media_items:", e);
+      }
     }
     
-    // Thumbnail 3 (Back)
-    const thumbBack = document.getElementById('thumb-back');
-    if (product.image_back) {
-      thumbBack.classList.remove('hidden');
-      thumbBack.querySelector('img').src = product.image_back;
-    } else {
-      thumbBack.classList.add('hidden');
-    }
-
-    // Reset thumbnails styling
-    selectImage('front');
-
-    // Video instellen
-    const videoContainer = document.getElementById('sheet-video-container');
-    const ytEmbed = document.getElementById('yt-embed');
-    const tiktokBtn = document.getElementById('tiktok-btn');
-    
-    // Verberg alles eerst
-    videoContainer.classList.add('hidden');
-    ytEmbed.classList.add('hidden');
-    tiktokBtn.classList.add('hidden');
-    ytEmbed.querySelector('iframe').src = "";
-    
-    if (product.videoData) {
-      videoContainer.classList.remove('hidden');
-      if (product.videoData.type === 'youtube') {
-        ytEmbed.classList.remove('hidden');
-        ytEmbed.querySelector('iframe').src = product.videoData.url;
-      } else if (product.videoData.type === 'tiktok') {
-        tiktokBtn.classList.remove('hidden');
-        tiktokBtn.href = product.videoData.url;
+    // Als er geen media_items zijn (oud product), bouw fallback
+    if (activeProductMedia.length === 0) {
+      if (isValidImage(product.image_front)) {
+        activeProductMedia.push({ type: 'image', url: product.image_front });
+      }
+      if (isValidImage(product.image_side)) {
+        activeProductMedia.push({ type: 'image', url: product.image_side });
+      }
+      if (isValidImage(product.image_back)) {
+        activeProductMedia.push({ type: 'image', url: product.image_back });
+      }
+      // Oude video_link toevoegen indien aanwezig
+      if (product.videoData) {
+        if (product.videoData.type === 'youtube' || product.videoData.type === 'tiktok') {
+          activeProductMedia.push({ type: 'video_link', url: product.video_link });
+        } else if (product.videoData.type === 'raw') {
+          activeProductMedia.push({ type: 'video', url: product.video_link });
+        }
       }
     }
 
-    // Bottom sheet & backdrop animeren
+    // Bouw thumbnails lijst
+    const thumbContainer = document.getElementById('sheet-thumbnails');
+    thumbContainer.innerHTML = ''; // Leegmaken
+    
+    if (activeProductMedia.length > 1) {
+      thumbContainer.classList.remove('hidden');
+      
+      activeProductMedia.forEach((media, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => selectProductMedia(idx);
+        btn.id = `product-thumb-${idx}`;
+        btn.className = "w-16 h-16 shrink-0 rounded-2xl overflow-hidden border border-stone-200 bg-stone-50 p-0.5 active:scale-95 transition relative";
+        
+        if (media.type === 'image') {
+          btn.innerHTML = `<img src="${media.url}" class="w-full h-full object-cover rounded-xl">`;
+        } else {
+          // Video icoontje overlay
+          let icon = `
+            <svg class="w-6 h-6 text-white drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          `;
+          btn.innerHTML = `
+            <div class="absolute inset-0 bg-black/20 flex items-center justify-center rounded-xl z-10">${icon}</div>
+            <div class="w-full h-full bg-stone-100 rounded-xl"></div>
+          `;
+        }
+        thumbContainer.appendChild(btn);
+      });
+    } else {
+      thumbContainer.classList.add('hidden');
+    }
+
+    // Selecteer eerste item
+    selectProductMedia(0);
+
+    // Animatie triggeren van sheet
     const sheet = document.getElementById('product-sheet');
     const backdrop = document.getElementById('sheet-backdrop');
     
@@ -269,39 +504,77 @@
     sheet.classList.remove('translate-y-0');
     sheet.classList.add('translate-y-full');
     
-    // Vertraagd stoppen van iframe om geluid te dempen na sluiten
+    // Leegmaken viewport na sluiten om video te dempen
     setTimeout(() => {
-      document.getElementById('yt-embed').querySelector('iframe').src = "";
+      document.getElementById('sheet-viewport-container').innerHTML = '';
     }, 300);
   }
 
-  function selectImage(view) {
-    if (!activeProduct) return;
-    
-    const mainImg = document.getElementById('sheet-main-img');
-    const btnFront = document.getElementById('thumb-front');
-    const btnSide = document.getElementById('thumb-side');
-    const btnBack = document.getElementById('thumb-back');
-    
-    // Selectie stylen resetten
-    [btnFront, btnSide, btnBack].forEach(btn => {
-      btn.classList.remove('border-amber-500');
-      btn.classList.add('border-stone-800');
+  function selectProductMedia(index) {
+    activeMediaIndex = index;
+    const media = activeProductMedia[index];
+    if (!media) return;
+
+    // Stylen van actieve thumbnail
+    activeProductMedia.forEach((_, idx) => {
+      const btn = document.getElementById(`product-thumb-${idx}`);
+      if (btn) {
+        if (idx === index) {
+          btn.className = "w-16 h-16 shrink-0 rounded-2xl overflow-hidden border-2 border-rose-500 bg-stone-50 p-0.5 active:scale-95 transition relative";
+        } else {
+          btn.className = "w-16 h-16 shrink-0 rounded-2xl overflow-hidden border border-stone-200 bg-stone-50 p-0.5 active:scale-95 transition relative";
+        }
+      }
     });
 
-    if (view === 'front') {
-      mainImg.src = activeProduct.image_front;
-      btnFront.classList.add('border-amber-500');
-      btnFront.classList.remove('border-stone-800');
-    } else if (view === 'side' && activeProduct.image_side) {
-      mainImg.src = activeProduct.image_side;
-      btnSide.classList.add('border-amber-500');
-      btnSide.classList.remove('border-stone-800');
-    } else if (view === 'back' && activeProduct.image_back) {
-      mainImg.src = activeProduct.image_back;
-      btnBack.classList.add('border-amber-500');
-      btnBack.classList.remove('border-stone-800');
+    const viewport = document.getElementById('sheet-viewport-container');
+    viewport.innerHTML = ''; // Leegmaken
+
+    if (media.type === 'image') {
+      viewport.innerHTML = `<img src="${media.url}" alt="${activeProduct.title}" class="w-full h-full object-cover animate-fade-in">`;
+    } else if (media.type === 'video') {
+      viewport.innerHTML = `<video src="${media.url}" controls autoplay playsinline class="w-full h-full object-cover"></video>`;
+    } else if (media.type === 'video_link') {
+      // YouTube / TikTok parsing
+      const ytData = getYoutubeEmbedUrl(media.url);
+      const ttData = getTiktokEmbedUrl(media.url);
+      
+      if (ytData) {
+        viewport.innerHTML = `<iframe src="${ytData}" class="w-full h-full object-cover" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      } else if (ttData) {
+        viewport.innerHTML = `<iframe src="${ttData}" class="w-full h-full object-cover" frameborder="0" allowfullscreen></iframe>`;
+      } else {
+        // Fallback knop naar link
+        viewport.innerHTML = `
+          <div class="w-full h-full bg-stone-50 flex flex-col items-center justify-center p-6 text-center space-y-3">
+            <svg class="w-12 h-12 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-xs text-stone-600 font-medium">Klik hieronder om de video te bekijken:</p>
+            <a href="${media.url}" target="_blank" class="bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs py-2 px-5 rounded-full transition shadow-md shadow-rose-500/10">Bekijk Video 🎥</a>
+          </div>
+        `;
+      }
     }
+  }
+
+  function getYoutubeEmbedUrl(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return "https://www.youtube.com/embed/" + match[2];
+    }
+    return null;
+  }
+
+  function getTiktokEmbedUrl(url) {
+    const regExp = /\/video\/(\d+)/;
+    const match = url.match(regExp);
+    if (match) {
+      return "https://www.tiktok.com/embed/v2/" + match[1];
+    }
+    return null;
   }
 </script>
 

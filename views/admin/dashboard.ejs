@@ -1,58 +1,64 @@
 <%- include('../partials/header') %>
 
+<!-- Calculate Total Blog Likes (Hearts) in EJS -->
+<% 
+  let totalHearts = 0; 
+  blogPosts.forEach(post => { totalHearts += (post.likes || 0); }); 
+%>
+
 <!-- Admin Welkom & Logout -->
 <section class="px-6 pt-6 pb-2 flex justify-between items-center">
   <div>
-    <h1 class="serif-title text-2xl font-bold text-stone-100">Admin Paneel</h1>
-    <p class="text-xs text-stone-400 font-light">Beheer van producten & statistieken</p>
+    <h1 class="serif-title text-2xl font-bold text-stone-900">Admin Paneel</h1>
+    <p class="text-xs text-stone-500 font-light">Welkom terug, Lisa! 👋</p>
   </div>
-  <a href="/admin/logout" class="text-xs text-red-400 hover:text-red-300 font-mono tracking-widest uppercase transition bg-red-950/20 border border-red-900/40 px-3 py-1.5 rounded-full">
+  <a href="/admin/logout" class="text-xs text-red-600 hover:text-red-700 font-mono tracking-widest uppercase transition bg-red-50 hover:bg-red-100/60 border border-red-200/50 px-3.5 py-2 rounded-full">
     Uitloggen
   </a>
 </section>
 
-<!-- Hoofd Actie: Nieuwe Bestelling (Perfect voor NFC ontmoetingen!) -->
-<section class="px-6 py-4">
+<!-- Hoofd Actie: Nieuwe Bestelling -->
+<section class="px-6 py-3">
   <a 
     href="/admin/orders/new" 
-    class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-4 flex items-center justify-center space-x-2 text-base transition shadow-lg shadow-amber-500/10"
+    class="w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.98] text-white font-bold rounded-2xl py-4 flex items-center justify-center space-x-2 text-base transition shadow-lg shadow-rose-500/15"
   >
     <!-- Shopping Bag Icon -->
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
     </svg>
-    <span>Nieuwe Bestelling Noteren</span>
+    <span>Bestelling Noteren (NFC)</span>
   </a>
 </section>
 
 <!-- Statistieken Grid -->
-<section class="px-6 py-2 grid grid-cols-2 gap-4">
+<section class="px-6 py-2 grid grid-cols-3 gap-3">
   <!-- Homepage Views -->
-  <div class="bg-stone-900/30 border border-stone-900/60 rounded-3xl p-4.5 space-y-1">
-    <span class="text-[10px] uppercase font-mono font-bold tracking-wider text-stone-500">Homepage Views</span>
-    <div class="text-2xl font-bold text-stone-100 flex items-baseline space-x-1">
-      <span><%= totalViews %></span>
-      <span class="text-xs font-light text-stone-500">bezoeken</span>
-    </div>
+  <div class="bg-white/70 border border-rose-100/40 rounded-3xl p-3.5 space-y-1 text-center shadow-sm">
+    <span class="text-[9px] uppercase font-mono font-bold tracking-wider text-stone-400 block">Visits</span>
+    <div class="text-xl font-bold text-stone-850"><%= totalViews %></div>
   </div>
 
   <!-- Abonnees Count -->
-  <div class="bg-stone-900/30 border border-stone-900/60 rounded-3xl p-4.5 space-y-1">
-    <span class="text-[10px] uppercase font-mono font-bold tracking-wider text-stone-500">Abonnees</span>
-    <div class="text-2xl font-bold text-stone-100 flex items-baseline space-x-1">
-      <span><%= subscribers.length %></span>
-      <span class="text-xs font-light text-stone-500">leden</span>
-    </div>
+  <div class="bg-white/70 border border-rose-100/40 rounded-3xl p-3.5 space-y-1 text-center shadow-sm">
+    <span class="text-[9px] uppercase font-mono font-bold tracking-wider text-stone-400 block">Abonnees</span>
+    <div class="text-xl font-bold text-stone-850"><%= subscribers.length %></div>
+  </div>
+
+  <!-- Likes Count -->
+  <div class="bg-white/70 border border-rose-100/40 rounded-3xl p-3.5 space-y-1 text-center shadow-sm">
+    <span class="text-[9px] uppercase font-mono font-bold tracking-wider text-stone-400 block">Hearts ❤️</span>
+    <div class="text-xl font-bold text-rose-500"><%= totalHearts %></div>
   </div>
 </section>
 
-<!-- Producten Lijst & Beheer -->
+<!-- 🛍️ Producten Lijst & Beheer -->
 <section class="px-6 py-4 space-y-4">
   <div class="flex justify-between items-center">
-    <h2 class="serif-title text-xl font-bold text-stone-100">Producten</h2>
+    <h2 class="serif-title text-xl font-bold text-stone-900">Mijn Prints</h2>
     <a 
       href="/admin/products/new" 
-      class="text-xs text-amber-500 hover:text-amber-400 font-mono tracking-wider uppercase transition bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full"
+      class="text-xs text-rose-500 hover:text-rose-600 font-bold font-mono tracking-wider uppercase transition bg-rose-50 border border-rose-100 px-3.5 py-1.5 rounded-full"
     >
       + Toevoegen
     </a>
@@ -61,18 +67,18 @@
   <!-- Product Kaarten Lijst -->
   <div class="space-y-3">
     <% if (products.length === 0) { %>
-      <div class="text-center py-8 bg-stone-900/20 border border-stone-850 rounded-2xl">
-        <p class="text-stone-500 text-xs">Nog geen producten.</p>
+      <div class="text-center py-8 bg-white/50 border border-dashed border-rose-100 rounded-2xl">
+        <p class="text-stone-400 text-xs font-light">Nog geen producten.</p>
       </div>
     <% } else { %>
       <% products.forEach(p => { %>
-        <div class="bg-stone-900/30 border border-stone-900/60 rounded-2.5xl p-4 flex items-center justify-between">
-          <div class="space-y-1 flex-grow pr-4">
-            <h3 class="text-sm font-semibold text-stone-200 truncate"><%= p.title %></h3>
-            <div class="flex items-center space-x-3 text-xs text-stone-500 font-light">
-              <span class="text-amber-500/80 font-bold">€<%= parseFloat(p.price).toFixed(2) %></span>
+        <div class="bg-white/80 border border-rose-100/40 rounded-[2rem] p-4 flex items-center justify-between shadow-sm hover:shadow-md transition">
+          <div class="space-y-0.5 flex-grow pr-4 truncate">
+            <h3 class="text-xs font-bold text-stone-800 truncate"><%= p.title %></h3>
+            <div class="flex items-center space-x-3 text-[10px] text-stone-400 font-light">
+              <span class="text-rose-500 font-bold">€<%= parseFloat(p.price).toFixed(2) %></span>
               <span class="flex items-center">
-                <svg class="w-3.5 h-3.5 mr-0.5 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3 h-3 mr-0.5 text-stone-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
@@ -85,14 +91,71 @@
           <div class="flex items-center space-x-2 flex-shrink-0">
             <a 
               href="/admin/products/<%= p.id %>/edit" 
-              class="text-xs bg-stone-800 hover:bg-stone-750 text-stone-300 px-3 py-2 rounded-xl transition"
+              class="text-[10px] font-bold bg-stone-100 hover:bg-stone-200/60 border border-stone-200 text-stone-600 px-3 py-2 rounded-xl transition"
             >
               Bewerk
             </a>
             <form action="/admin/products/<%= p.id %>/delete" method="POST" onsubmit="return confirm('Weet je zeker dat je dit product wilt verwijderen?');" class="inline">
               <button 
                 type="submit" 
-                class="text-xs bg-red-950/30 hover:bg-red-950/50 border border-red-900/40 text-red-400 px-3 py-2 rounded-xl transition"
+                class="text-[10px] font-bold bg-red-50 hover:bg-red-100/60 border border-red-100 text-red-500 px-3 py-2 rounded-xl transition"
+              >
+                Wis
+              </button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</section>
+
+<!-- ✨ Lisa's Dagboek (Blogbeheer) -->
+<section class="px-6 py-4 space-y-4 border-t border-rose-100/30">
+  <div class="flex justify-between items-center">
+    <h2 class="serif-title text-xl font-bold text-stone-900">Mijn Dagboek</h2>
+    <a 
+      href="/admin/blog/new" 
+      class="text-xs text-rose-500 hover:text-rose-600 font-bold font-mono tracking-wider uppercase transition bg-rose-50 border border-rose-100 px-3.5 py-1.5 rounded-full"
+    >
+      + Schrijf Story
+    </a>
+  </div>
+
+  <!-- Blog Kaarten Lijst -->
+  <div class="space-y-3">
+    <% if (blogPosts.length === 0) { %>
+      <div class="text-center py-8 bg-white/50 border border-dashed border-rose-100 rounded-2xl">
+        <p class="text-stone-400 text-xs font-light">Nog geen dagboekberichten.</p>
+      </div>
+    <% } else { %>
+      <% blogPosts.forEach(post => { %>
+        <div class="bg-white/80 border border-rose-100/40 rounded-[2rem] p-4 flex items-center justify-between shadow-sm hover:shadow-md transition">
+          <div class="space-y-0.5 flex-grow pr-4 truncate">
+            <h3 class="text-xs font-bold text-stone-800 truncate"><%= post.title %></h3>
+            <div class="flex items-center space-x-3 text-[10px] text-stone-400 font-light">
+              <span class="text-rose-500 font-bold flex items-center">
+                <svg class="w-3.5 h-3.5 mr-0.5 fill-rose-500 text-rose-500" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <%= post.likes || 0 %> hartjes
+              </span>
+              <span><%= new Date(post.created_at).toLocaleDateString('nl-NL') %></span>
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <a 
+              href="/admin/blog/<%= post.id %>/edit" 
+              class="text-[10px] font-bold bg-stone-100 hover:bg-stone-200/60 border border-stone-200 text-stone-600 px-3 py-2 rounded-xl transition"
+            >
+              Bewerk
+            </a>
+            <form action="/admin/blog/<%= post.id %>/delete" method="POST" onsubmit="return confirm('Weet je zeker dat je dit dagboekbericht wilt verwijderen?');" class="inline">
+              <button 
+                type="submit" 
+                class="text-[10px] font-bold bg-red-50 hover:bg-red-100/60 border border-red-100 text-red-500 px-3 py-2 rounded-xl transition"
               >
                 Wis
               </button>
@@ -105,13 +168,13 @@
 </section>
 
 <!-- Abonnees Lijst -->
-<section class="px-6 py-4 space-y-4">
+<section class="px-6 py-4 space-y-4 border-t border-rose-100/30">
   <div class="flex justify-between items-center">
-    <h2 class="serif-title text-xl font-bold text-stone-100">Nieuwsbrief Abonnees</h2>
+    <h2 class="serif-title text-xl font-bold text-stone-900">Nieuwsbrief Abonnees</h2>
     <% if (subscribers.length > 0) { %>
       <button 
         onclick="copyEmails()" 
-        class="text-[10px] text-stone-400 hover:text-stone-200 font-mono tracking-wider uppercase transition bg-stone-850 border border-stone-800 px-2.5 py-1.5 rounded-lg flex items-center space-x-1"
+        class="text-[10px] text-stone-600 hover:text-stone-900 font-mono tracking-wider uppercase transition bg-stone-50 border border-stone-200 px-2.5 py-1.5 rounded-lg flex items-center space-x-1"
       >
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
@@ -121,15 +184,15 @@
     <% } %>
   </div>
 
-  <div class="bg-stone-900/20 border border-stone-900 rounded-3xl p-4 max-h-60 overflow-y-auto no-scrollbar">
+  <div class="bg-white/60 border border-rose-100/30 rounded-[2rem] p-4 max-h-60 overflow-y-auto no-scrollbar shadow-sm">
     <% if (subscribers.length === 0) { %>
-      <p class="text-stone-500 text-xs text-center py-4">Nog geen abonnees aangemeld.</p>
+      <p class="text-stone-400 text-xs text-center py-4 font-light">Nog geen abonnees aangemeld.</p>
     <% } else { %>
-      <div class="divide-y divide-stone-900">
+      <div class="divide-y divide-rose-50/50">
         <% subscribers.forEach(sub => { %>
           <div class="py-2.5 flex justify-between items-center">
-            <span class="text-xs text-stone-300 font-medium select-all"><%= sub.email %></span>
-            <span class="text-[9px] text-stone-500 font-mono"><%= new Date(sub.created_at).toLocaleDateString('nl-NL') %></span>
+            <span class="text-xs text-stone-700 font-medium select-all"><%= sub.email %></span>
+            <span class="text-[9px] text-stone-400 font-mono"><%= new Date(sub.created_at).toLocaleDateString('nl-NL') %></span>
           </div>
         <% }) %>
       </div>

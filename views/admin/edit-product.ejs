@@ -4,23 +4,23 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center space-x-3">
-      <a href="/admin" class="text-stone-400 hover:text-stone-200 transition">
+      <a href="/admin" class="text-stone-400 hover:text-stone-700 transition">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
       </a>
       <div>
-        <h1 class="serif-title text-2xl font-bold text-stone-100">Product Bewerken</h1>
-        <p class="text-xs text-stone-400 font-light">Wijzig de gegevens of foto's van dit product</p>
+        <h1 class="serif-title text-2xl font-bold text-stone-900">Product Bewerken</h1>
+        <p class="text-xs text-stone-500 font-light">Wijzig de gegevens of foto's van dit product</p>
       </div>
     </div>
 
     <!-- Formulier -->
-    <form action="/admin/products/<%= product.id %>/edit" method="POST" class="space-y-5 bg-stone-900/30 border border-stone-900/60 rounded-3xl p-6 shadow-xl" onsubmit="return validateForm()">
+    <form action="/admin/products/<%= product.id %>/edit" method="POST" class="space-y-5 bg-white/70 border border-rose-100/40 rounded-[2rem] p-6 shadow-sm" onsubmit="return validateForm()" autocomplete="off">
       
       <!-- Titel -->
       <div class="space-y-1">
-        <label for="title" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Titel</label>
+        <label for="title" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Titel</label>
         <input 
           type="text" 
           id="title" 
@@ -28,13 +28,13 @@
           value="<%= product.title %>" 
           placeholder="Bijv. Sleutelhanger Draak" 
           required 
-          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3.5 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
         >
       </div>
 
       <!-- Prijs -->
       <div class="space-y-1">
-        <label for="price" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Prijs (€)</label>
+        <label for="price" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Prijs (€)</label>
         <input 
           type="number" 
           step="0.01" 
@@ -43,95 +43,71 @@
           value="<%= parseFloat(product.price).toFixed(2) %>" 
           placeholder="0.00" 
           required 
-          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3.5 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
         >
       </div>
 
       <!-- Beschrijving -->
       <div class="space-y-1">
-        <label for="description" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Beschrijving</label>
+        <label for="description" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Beschrijving</label>
         <textarea 
           id="description" 
           name="description" 
           rows="4" 
           placeholder="Geef details over materiaal, printtijd en opties..." 
           required 
-          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3.5 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
         ><%= product.description %></textarea>
       </div>
 
-      <!-- Video Link (YouTube of TikTok) -->
-      <div class="space-y-1">
-        <label for="video_link" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Video Link (YouTube of TikTok - optioneel)</label>
-        <input 
-          type="url" 
-          id="video_link" 
-          name="video_link" 
-          value="<%= product.video_link || '' %>" 
-          placeholder="https://www.youtube.com/watch?... of TikTok" 
-          class="w-full bg-stone-950 border border-stone-850 rounded-2xl px-4 py-3.5 text-sm text-stone-200 placeholder-stone-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
-        >
+      <!-- ONBEPERKT MEDIA BEHEER -->
+      <div class="space-y-4 bg-stone-50/50 p-6 rounded-3xl border border-stone-200/65 pt-4">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
+            <span>🖼️ Foto's & Video's</span>
+            <span class="text-[10px] font-normal text-stone-400 font-sans capitalize">(Onbeperkt)</span>
+          </h3>
+          <span class="text-xs text-stone-500 font-mono" id="media-count">0 items</span>
+        </div>
+
+        <!-- Hidden input om de JSON-array van alle media naar de backend te sturen -->
+        <input type="hidden" name="media_items" id="media_items_json" value="[]">
+
+        <!-- De lijst met geüploade/toegevoegde media -->
+        <div id="media-list" class="space-y-3">
+          <!-- Dynamisch gevuld door JS -->
+        </div>
+
+        <!-- Knoppen om nieuwe media toe te voegen -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2">
+          <!-- Foto uploaden -->
+          <label class="cursor-pointer bg-white hover:bg-stone-50 border border-stone-200 rounded-xl py-3 px-4 flex items-center justify-center gap-2 text-stone-700 text-xs font-bold transition shadow-sm">
+            <span>➕ Foto</span>
+            <input type="file" accept="image/*" class="hidden" onchange="addPhoto(this)">
+          </label>
+          
+          <!-- Video uploaden -->
+          <label class="cursor-pointer bg-white hover:bg-stone-50 border border-stone-200 rounded-xl py-3 px-4 flex items-center justify-center gap-2 text-stone-700 text-xs font-bold transition shadow-sm">
+            <span>🎥 Video</span>
+            <input type="file" accept="video/*" class="hidden" onchange="addVideo(this)">
+          </label>
+
+          <!-- Video Link (YouTube / TikTok) -->
+          <button type="button" onclick="addVideoLinkPrompt()" class="bg-white hover:bg-stone-50 border border-stone-200 rounded-xl py-3 px-4 flex items-center justify-center gap-2 text-stone-700 text-xs font-bold transition shadow-sm">
+            <span>🔗 Link (YT/TikTok)</span>
+          </button>
+        </div>
+        <p class="text-[10px] text-stone-400 font-light leading-relaxed">
+          Tip: Je kunt foto's, korte filmpjes (tot 5s), en links van YouTube of TikTok toevoegen. Gebruik de pijltjes ⬆️ ⬇️ om de volgorde aan te passen!
+        </p>
       </div>
-
-      <!-- AFBEELDINGEN UPLOAD & OPTIMALISATIE (Met previews) -->
-      <div class="space-y-4 pt-2 border-t border-stone-850">
-        <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-stone-400">Foto's beheren</h3>
-        <p class="text-[10px] text-stone-500 leading-normal">Laat de invoervelden leeg om de bestaande foto's te behouden. Selecteer een nieuw bestand om een foto te vervangen.</p>
-
-        <!-- 1. Voor-aanzicht (Verplicht) -->
-        <div class="space-y-2">
-          <label class="text-xs font-medium text-stone-300">Hoofdafbeelding (Voor-aanzicht)</label>
-          <input 
-            type="file" 
-            accept="image/*" 
-            id="file_front" 
-            onchange="handleImageUpload(this, 'image_front', 'preview_front')"
-            class="block w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-800 file:text-stone-200 hover:file:bg-stone-750 transition"
-          >
-          <input type="hidden" id="image_front" name="image_front" value="<%= product.image_front %>">
-          <div class="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-950 border border-stone-850 mt-1" id="wrapper_preview_front">
-            <img id="preview_front" src="<%= product.image_front %>" class="w-full h-full object-cover">
-          </div>
-        </div>
-
-        <!-- 2. Zij-aanzicht (Optioneel) -->
-        <div class="space-y-2">
-          <label class="text-xs font-medium text-stone-300">Zij-aanzicht (Optioneel)</label>
-          <input 
-            type="file" 
-            accept="image/*" 
-            id="file_side" 
-            onchange="handleImageUpload(this, 'image_side', 'preview_side')"
-            class="block w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-800 file:text-stone-200 hover:file:bg-stone-750 transition"
-          >
-          <input type="hidden" id="image_side" name="image_side" value="<%= product.image_side || '' %>">
-          <div class="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-950 border border-stone-850 mt-1 <%= product.image_side ? '' : 'hidden' %>" id="wrapper_preview_side">
-            <img id="preview_side" src="<%= product.image_side || '' %>" class="w-full h-full object-cover">
-          </div>
-        </div>
-
-        <!-- 3. Achter-aanzicht (Optioneel) -->
-        <div class="space-y-2">
-          <label class="text-xs font-medium text-stone-300">Achter-aanzicht (Optioneel)</label>
-          <input 
-            type="file" 
-            accept="image/*" 
-            id="file_back" 
-            onchange="handleImageUpload(this, 'image_back', 'preview_back')"
-            class="block w-full text-xs text-stone-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-800 file:text-stone-200 hover:file:bg-stone-750 transition"
-          >
-          <input type="hidden" id="image_back" name="image_back" value="<%= product.image_back || '' %>">
-          <div class="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-950 border border-stone-850 mt-1 <%= product.image_back ? '' : 'hidden' %>" id="wrapper_preview_back">
-            <img id="preview_back" src="<%= product.image_back || '' %>" class="w-full h-full object-cover">
-          </div>
-        </div>
       </div>
 
       <!-- Submit Knop -->
       <button 
         type="submit" 
         id="submit-btn"
-        class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-4 text-sm tracking-wide transition shadow-lg shadow-amber-500/10"
+        class="w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.98] text-white font-bold rounded-2xl py-4 text-sm tracking-wide transition shadow-lg shadow-rose-500/10"
       >
         Wijzigingen Opslaan
       </button>
@@ -141,10 +117,127 @@
 
 <!-- Client-side script voor afbeeldingsoptimalisatie -->
 <script>
-  function handleImageUpload(inputElement, hiddenInputId, previewImgId) {
-    const file = inputElement.files[0];
+  // Pre-load bestaande media-items of maak fallback op basis van oude kolommen
+  let mediaItems = [];
+  <% if (product.media_items) { %>
+    try {
+      mediaItems = <%- product.media_items %> || [];
+    } catch(e) {
+      console.error("Fout bij laden media_items:", e);
+    }
+  <% } %>
+  
+  // Fallback voor legacy producten die nog geen media_items kolom hebben ingevuld
+  if (mediaItems.length === 0) {
+    <% if (product.image_front) { %>
+      mediaItems.push({ type: 'image', url: `<%- product.image_front %>` });
+    <% } %>
+    <% if (product.image_side) { %>
+      mediaItems.push({ type: 'image', url: `<%- product.image_side %>` });
+    <% } %>
+    <% if (product.image_back) { %>
+      mediaItems.push({ type: 'image', url: `<%- product.image_back %>` });
+    <% } %>
+    <% if (product.video_link) { %>
+      <% if (product.video_link.startsWith('data:')) { %>
+        mediaItems.push({ type: 'video', url: `<%- product.video_link %>` });
+      <% } else { %>
+        mediaItems.push({ type: 'video_link', url: `<%- product.video_link %>` });
+      <% } %>
+    <% } %>
+  }
+
+  function updateMediaJson() {
+    document.getElementById('media_items_json').value = JSON.stringify(mediaItems);
+    document.getElementById('media-count').innerText = `${mediaItems.length} item${mediaItems.length === 1 ? '' : 's'}`;
+    renderMediaList();
+  }
+
+  function renderMediaList() {
+    const list = document.getElementById('media-list');
+    list.innerHTML = '';
+
+    if (mediaItems.length === 0) {
+      list.innerHTML = `
+        <div class="text-center py-8 border-2 border-dashed border-stone-200 rounded-2xl text-stone-400 text-xs font-medium bg-white">
+          Nog geen foto's of video's toegevoegd.
+        </div>
+      `;
+      return;
+    }
+
+    mediaItems.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = "flex items-center gap-4 bg-white p-3 rounded-2xl border border-stone-200 shadow-sm";
+
+      // Preview bepalen
+      let previewHtml = '';
+      if (item.type === 'image') {
+        previewHtml = `<img src="${item.url}" class="w-14 h-14 object-cover rounded-xl border border-stone-100">`;
+      } else if (item.type === 'video') {
+        previewHtml = `
+          <div class="w-14 h-14 bg-stone-100 rounded-xl border border-stone-100 flex items-center justify-center relative">
+            <svg class="w-5 h-5 text-stone-500" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span class="absolute bottom-1 right-1 text-[8px] bg-stone-700/80 text-white font-mono font-bold px-1 rounded">MP4</span>
+          </div>
+        `;
+      } else if (item.type === 'video_link') {
+        previewHtml = `
+          <div class="w-14 h-14 bg-stone-100 rounded-xl border border-stone-100 flex items-center justify-center relative overflow-hidden">
+            <svg class="w-5 h-5 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.163c-.272-.121-.714-.239-1.393-.353-.68-.115-1.4-.191-2.164-.23-.763-.038-1.58-.063-2.45-.074-.871-.011-1.782-.016-2.735-.016s-1.864.005-2.735.016c-.87.011-1.687.036-2.45.074-.764.039-1.484.115-2.164.23-.68.114-1.121.232-1.393.353-.272.122-.44.256-.505.405-.065.148-.113.385-.143.712-.03.328-.052.748-.065 1.258a36.425 36.425 0 00-.02 1.944v2.534c0 .653.007 1.3.02 1.943.013.511.035.93.065 1.259.03.327.078.563.143.712.065.148.233.283.505.405.272.121.714.239 1.393.353.68.115 1.4.191 2.164.23.763.038 1.58.063 2.45.074.871.011 1.782.016 2.735.016s1.864-.005 2.735-.016c.87-.011 1.687-.036 2.45-.074.764-.039 1.484-.115 2.164-.23.68-.114 1.121-.232 1.393-.353.272-.122.44-.256.505-.405.065-.148.113-.385.143-.712.03-.328.052-.748.065-1.258a36.425 36.425 0 00.02-1.944v-2.534c0-.653-.007-1.3-.02-1.943-.013-.511-.035-.93-.065-1.259-.03-.327-.078-.563-.143-.712-.065-.148-.233-.283-.505-.405zM9.5 15.5V8.5l6.5 3.5z"/></svg>
+            <span class="absolute bottom-1 right-1 text-[8px] bg-stone-700/80 text-white font-mono font-bold px-1 rounded">LINK</span>
+          </div>
+        `;
+      }
+
+      // Tekst bepalen
+      let textHtml = '';
+      if (item.type === 'image') {
+        textHtml = `<div><div class="text-xs font-bold text-stone-900">Afbeelding</div><div class="text-[10px] text-stone-500 font-mono truncate max-w-[150px]">Lokaal geüpload</div></div>`;
+      } else if (item.type === 'video') {
+        textHtml = `<div><div class="text-xs font-bold text-stone-900">Korte Video</div><div class="text-[10px] text-stone-500 font-mono truncate max-w-[150px]">Lokaal geüpload</div></div>`;
+      } else if (item.type === 'video_link') {
+        textHtml = `<div><div class="text-xs font-bold text-stone-900">Video Link</div><div class="text-[10px] text-rose-500 font-medium truncate max-w-[150px]" title="${item.url}">${item.url}</div></div>`;
+      }
+
+      // Knoppen bouwen
+      card.innerHTML = `
+        ${previewHtml}
+        <div class="flex-grow min-w-0">
+          ${textHtml}
+        </div>
+        <div class="flex items-center gap-1.5 flex-shrink-0">
+          <button type="button" onclick="moveMedia(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-250 active:scale-95 text-stone-700 flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none transition text-xs">⬆️</button>
+          <button type="button" onclick="moveMedia(${index}, 1)" ${index === mediaItems.length - 1 ? 'disabled' : ''} class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-250 active:scale-95 text-stone-700 flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none transition text-xs">⬇️</button>
+          <button type="button" onclick="removeMedia(${index})" class="w-8 h-8 rounded-xl bg-red-50 hover:bg-red-100 active:scale-95 text-red-600 flex items-center justify-center transition text-xs">🗑️</button>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function moveMedia(index, direction) {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= mediaItems.length) return;
+    
+    // Swap items in de array
+    const temp = mediaItems[index];
+    mediaItems[index] = mediaItems[targetIndex];
+    mediaItems[targetIndex] = temp;
+    
+    updateMediaJson();
+  }
+
+  function removeMedia(index) {
+    mediaItems.splice(index, 1);
+    updateMediaJson();
+  }
+
+  function addPhoto(input) {
+    const file = input.files[0];
     if (!file) return;
 
+    // Feedback tonen op de submit knop
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = true;
     submitBtn.innerText = "Foto optimaliseren...";
@@ -179,31 +272,66 @@
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Omzetten naar gecomprimeerde JPEG (kwaliteit 0.85)
+        // JPEG 0.85 kwaliteit
         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
 
-        // Waarden toewijzen en preview tonen
-        document.getElementById(hiddenInputId).value = compressedBase64;
-        
-        const previewImg = document.getElementById(previewImgId);
-        previewImg.src = compressedBase64;
-        document.getElementById('wrapper_' + previewImgId).classList.remove('hidden');
+        mediaItems.push({ type: 'image', url: compressedBase64 });
+        updateMediaJson();
 
-        // Knop weer activeren
+        // Knop activeren
         submitBtn.disabled = false;
         submitBtn.innerText = "Wijzigingen Opslaan";
+        input.value = ''; // Reset input
       };
     };
   }
 
+  function addVideo(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // Toon waarschuwing over grote video uploads
+    if (file.size > 20 * 1024 * 1024) {
+      alert("Deze video is te groot! Kies a.u.b. een korter filmpje of upload het op YouTube/TikTok en plak de link.");
+      input.value = '';
+      return;
+    }
+
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Video inladen...";
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      mediaItems.push({ type: 'video', url: e.target.result });
+      updateMediaJson();
+
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Wijzigingen Opslaan";
+      input.value = ''; // Reset input
+    };
+  }
+
+  function addVideoLinkPrompt() {
+    const url = prompt("Plak de YouTube of TikTok link hier:");
+    if (!url || url.trim() === '') return;
+    
+    mediaItems.push({ type: 'video_link', url: url.trim() });
+    updateMediaJson();
+  }
+
   function validateForm() {
-    const imageFront = document.getElementById('image_front').value;
-    if (!imageFront) {
-      alert("Er moet een hoofdafbeelding (voor-aanzicht) aanwezig zijn.");
+    const hasImage = mediaItems.some(item => item.type === 'image');
+    if (!hasImage) {
+      alert("Er moet minimaal één foto aanwezig zijn.");
       return false;
     }
     return true;
   }
+
+  // Eerste render initialiseren
+  updateMediaJson();
 </script>
 
 <%- include('../partials/footer') %>

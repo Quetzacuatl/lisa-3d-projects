@@ -1,7 +1,7 @@
 <%- include('../partials/header') %>
 
 <section class="px-6 py-6 flex-grow">
-  <div class="space-y-6">
+  <div class="space-y-6 max-w-4xl mx-auto">
     <!-- Header -->
     <div class="flex items-center space-x-3">
       <a href="/admin" class="text-stone-400 hover:text-stone-700 transition">
@@ -10,52 +10,39 @@
         </svg>
       </a>
       <div>
-        <h1 class="serif-title text-2xl font-bold text-stone-900">Product Toevoegen</h1>
-        <p class="text-xs text-stone-500 font-light">Maak een nieuw product aan in het portfolio</p>
+        <h1 class="serif-title text-2xl font-bold text-stone-900">Dagboek Bericht Bewerken</h1>
+        <p class="text-xs text-stone-500 font-light">Wijzig je verhaal of beheer de projectfoto's</p>
       </div>
     </div>
 
     <!-- Formulier -->
-    <form action="/admin/products/new" method="POST" class="space-y-5 bg-white/70 border border-rose-100/40 rounded-[2rem] p-6 shadow-sm" onsubmit="return validateForm()" autocomplete="off">
+    <form action="/admin/blog/<%= blog.id %>/edit" method="POST" class="space-y-6 bg-white/70 border border-rose-100/40 rounded-[2rem] p-6 md:p-8 shadow-sm">
       
       <!-- Titel -->
       <div class="space-y-1">
-        <label for="title" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Titel</label>
+        <label for="title" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Titel van het Bericht</label>
         <input 
           type="text" 
           id="title" 
           name="title" 
-          placeholder="Bijv. Sleutelhanger Draak" 
+          value="<%= blog.title %>" 
+          placeholder="Bijv. Het geheime recept van de perfecte kameleon-kleurige draak! 🐲" 
           required 
-          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3.5 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
+          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-5 py-4 text-base font-medium text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
         >
       </div>
 
-      <!-- Prijs -->
+      <!-- Inhoud / Tekst (Grote schrijfomgeving) -->
       <div class="space-y-1">
-        <label for="price" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Prijs (€)</label>
-        <input 
-          type="number" 
-          step="0.01" 
-          id="price" 
-          name="price" 
-          placeholder="0.00" 
-          required 
-          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3.5 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
-        >
-      </div>
-
-      <!-- Beschrijving -->
-      <div class="space-y-1">
-        <label for="description" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Beschrijving</label>
+        <label for="content" class="text-xs font-mono font-bold uppercase tracking-wider text-stone-500">Jouw Verhaal / Artikel Inhoud</label>
         <textarea 
-          id="description" 
-          name="description" 
-          rows="4" 
-          placeholder="Geef details over materiaal, printtijd en opties..." 
+          id="content" 
+          name="content" 
+          rows="16" 
+          placeholder="Schrijf hier in alle vrijheid over je project..." 
           required 
-          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3.5 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
-        ></textarea>
+          class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-5 py-4 text-base text-stone-850 leading-relaxed placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
+        ><%= blog.content %></textarea>
       </div>
 
       <!-- ONBEPERKT MEDIA BEHEER -->
@@ -104,9 +91,9 @@
       <button 
         type="submit" 
         id="submit-btn"
-        class="w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.98] text-white font-bold rounded-2xl py-4 text-sm tracking-wide transition shadow-lg shadow-rose-500/10"
+        class="w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.98] text-white font-bold rounded-2xl py-4.5 text-base tracking-wide transition shadow-lg shadow-rose-500/10"
       >
-        Product Opslaan
+        Wijzigingen Opslaan ✨
       </button>
     </form>
   </div>
@@ -114,7 +101,28 @@
 
 <!-- Client-side script voor afbeeldingsoptimalisatie -->
 <script>
+  // Pre-load bestaande media-items of maak fallback op basis van oude kolommen
   let mediaItems = [];
+  <% if (blog.media_items) { %>
+    try {
+      mediaItems = <%- blog.media_items %> || [];
+    } catch(e) {
+      console.error("Fout bij laden media_items:", e);
+    }
+  <% } %>
+  
+  // Fallback voor legacy blogs die nog geen media_items kolom gevuld hebben
+  if (mediaItems.length === 0) {
+    <% if (blog.image) { %>
+      mediaItems.push({ type: 'image', url: `<%- blog.image %>` });
+    <% } %>
+    <% if (blog.image_2) { %>
+      mediaItems.push({ type: 'image', url: `<%- blog.image_2 %>` });
+    <% } %>
+    <% if (blog.image_3) { %>
+      mediaItems.push({ type: 'image', url: `<%- blog.image_3 %>` });
+    <% } %>
+  }
 
   function updateMediaJson() {
     document.getElementById('media_items_json').value = JSON.stringify(mediaItems);
@@ -249,7 +257,7 @@
 
         // Knop activeren
         submitBtn.disabled = false;
-        submitBtn.innerText = "Product Opslaan";
+        submitBtn.innerText = "Wijzigingen Opslaan ✨";
         input.value = ''; // Reset input
       };
     };
@@ -277,7 +285,7 @@
       updateMediaJson();
 
       submitBtn.disabled = false;
-      submitBtn.innerText = "Product Opslaan";
+      submitBtn.innerText = "Wijzigingen Opslaan ✨";
       input.value = ''; // Reset input
     };
   }
@@ -293,7 +301,7 @@
   function validateForm() {
     const hasImage = mediaItems.some(item => item.type === 'image');
     if (!hasImage) {
-      alert("Voeg a.u.b. minimaal één foto toe aan het product.");
+      alert("Er moet minimaal één foto aanwezig zijn.");
       return false;
     }
     return true;
@@ -303,4 +311,4 @@
   updateMediaJson();
 </script>
 
-<%- include('../partials/header') %>
+<%- include('../partials/footer') %>

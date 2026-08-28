@@ -4,20 +4,20 @@
   <div class="space-y-6 flex-grow flex flex-col">
     <!-- Header -->
     <div class="flex items-center space-x-3">
-      <a href="/admin" class="text-stone-400 hover:text-stone-200 transition">
+      <a href="/admin" class="text-stone-400 hover:text-stone-700 transition">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
       </a>
       <div>
-        <h1 class="serif-title text-2xl font-bold text-stone-100">Bestelling Noteren</h1>
-        <p class="text-xs text-stone-400 font-light">Maak een bestelling aan voor een klant</p>
+        <h1 class="serif-title text-2xl font-bold text-stone-900">Bestelling Noteren</h1>
+        <p class="text-xs text-stone-500 font-light">Maak een bestelling aan voor een klant</p>
       </div>
     </div>
 
     <!-- Stap 1: Klantgegevens -->
-    <div class="space-y-4 bg-stone-900/30 border border-stone-900/60 rounded-3xl p-5 shadow-lg">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-amber-500">Stap 1: Klantgegevens</h2>
+    <div class="space-y-4 bg-white/70 border border-rose-100/40 rounded-[2rem] p-5 shadow-sm">
+      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-rose-500">Stap 1: Klantgegevens</h2>
       
       <div class="space-y-3">
         <!-- Naam -->
@@ -28,7 +28,7 @@
             id="clientName" 
             placeholder="Bijv. Pieter van Bogaert" 
             oninput="saveDraftToStorage()"
-            class="w-full bg-stone-950 border border-stone-850 rounded-xl px-3.5 py-3 text-sm text-stone-200 placeholder-stone-755 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+            class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
           >
         </div>
 
@@ -40,7 +40,7 @@
             id="clientPhone" 
             placeholder="Bijv. 0485809859" 
             oninput="saveDraftToStorage()"
-            class="w-full bg-stone-950 border border-stone-850 rounded-xl px-3.5 py-3 text-sm text-stone-200 placeholder-stone-755 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+            class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
           >
         </div>
 
@@ -52,15 +52,15 @@
             id="clientEmail" 
             placeholder="Bijv. pieter@gmail.com" 
             oninput="saveDraftToStorage()"
-            class="w-full bg-stone-950 border border-stone-850 rounded-xl px-3.5 py-3 text-sm text-stone-200 placeholder-stone-755 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+            class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
           >
         </div>
       </div>
     </div>
 
     <!-- Stap 2: Producten Toevoegen -->
-    <div class="space-y-4 bg-stone-900/30 border border-stone-900/60 rounded-3xl p-5 shadow-lg">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-amber-500">Stap 2: Product Selecteren</h2>
+    <div class="space-y-4 bg-white/70 border border-rose-100/40 rounded-[2rem] p-5 shadow-sm">
+      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-rose-500">Stap 2: Product Selecteren</h2>
       
       <div class="space-y-3">
         <!-- Product Dropdown -->
@@ -68,7 +68,7 @@
           <label for="productSelect" class="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">Product *</label>
           <select 
             id="productSelect" 
-            class="w-full bg-stone-950 border border-stone-850 rounded-xl px-3 py-3 text-sm text-stone-200 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+            class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-stone-800 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
           >
             <option value="" disabled selected>Kies een product...</option>
             <% products.forEach(p => { %>
@@ -88,7 +88,7 @@
               id="itemQuantity" 
               value="1" 
               min="1" 
-              class="w-full bg-stone-950 border border-stone-850 rounded-xl px-3 py-3 text-sm text-stone-200 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+              class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-stone-800 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
             >
           </div>
 
@@ -99,7 +99,7 @@
               type="text" 
               id="itemColor" 
               placeholder="Bijv. bruin en zwart" 
-              class="w-full bg-stone-950 border border-stone-850 rounded-xl px-3 py-3 text-sm text-stone-200 placeholder-stone-755 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition"
+              class="w-full bg-stone-50/50 border border-stone-200 rounded-2xl px-3 py-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition"
             >
           </div>
         </div>
@@ -108,7 +108,7 @@
         <button 
           type="button" 
           onclick="addProductItem()"
-          class="w-full bg-stone-800 hover:bg-stone-750 text-stone-200 text-xs font-semibold py-3 rounded-xl border border-stone-800 transition active:scale-[0.98]"
+          class="w-full bg-stone-100 hover:bg-stone-250 hover:bg-stone-200/60 text-stone-700 text-xs font-bold py-3.5 rounded-2xl border border-stone-200 transition active:scale-[0.98]"
         >
           Voeg toe aan bestelling
         </button>
@@ -116,29 +116,29 @@
     </div>
 
     <!-- Stap 3: Overzicht (Winkelwagen) -->
-    <div class="space-y-4 bg-stone-900/30 border border-stone-900/60 rounded-3xl p-5 shadow-lg flex-grow flex flex-col">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-amber-500">Stap 3: Besteloverzicht</h2>
+    <div class="space-y-4 bg-white/70 border border-rose-100/40 rounded-[2rem] p-5 shadow-sm flex-grow flex flex-col">
+      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-rose-500">Stap 3: Besteloverzicht</h2>
       
       <!-- Cart List -->
       <div id="cart-list" class="space-y-2 flex-grow overflow-y-auto no-scrollbar max-h-56">
         <!-- Dynamisch gevuld door JS -->
-        <div class="text-center py-6 text-stone-550 text-xs font-light">
+        <div class="text-center py-6 text-stone-400 text-xs font-light">
           Nog geen producten toegevoegd aan deze bestelling.
         </div>
       </div>
 
       <!-- Totaalbedrag & Actie -->
-      <div class="pt-3 border-t border-stone-850 space-y-4 flex-shrink-0">
+      <div class="pt-3 border-t border-rose-100/40 space-y-4 flex-shrink-0">
         <div class="flex justify-between items-center text-sm font-semibold">
-          <span class="text-stone-400">Richtprijs Totaal:</span>
-          <span id="cart-total" class="text-lg font-bold text-amber-500">€0.00</span>
+          <span class="text-stone-550">Richtprijs Totaal:</span>
+          <span id="cart-total" class="text-lg font-bold text-rose-500">€0.00</span>
         </div>
 
         <button 
           type="button" 
           id="submit-order-btn"
           onclick="submitOrder()"
-          class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-4 text-sm tracking-wide transition shadow-lg shadow-amber-500/10 flex items-center justify-center space-x-2"
+          class="w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.98] text-white font-bold rounded-2xl py-4 text-sm tracking-wide transition shadow-lg shadow-rose-500/10 flex items-center justify-center space-x-2"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l8-5.68a2 2 0 012.22 0l8 5.68A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-2.25-1.5a2 2 0 00-2.22 0l-2.25 1.5" />
@@ -150,16 +150,14 @@
   </div>
 </section>
 
-<!-- ---------------------------------------------------- -->
 <!-- 📱 SUCCESS MODAL WITH WHATSAPP LINK -->
-<!-- ---------------------------------------------------- -->
 <div 
   id="success-backdrop" 
-  class="fixed inset-0 bg-black/85 opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center justify-center px-6"
+  class="fixed inset-0 bg-stone-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center justify-center px-6"
 >
-  <div class="bg-stone-900 border border-stone-800 rounded-[2.5rem] p-6 max-w-sm w-full text-center space-y-6 shadow-2xl">
+  <div class="bg-white border border-rose-100 rounded-[2.5rem] p-6 max-w-sm w-full text-center space-y-6 shadow-2xl">
     <!-- Success Icon -->
-    <div class="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full flex items-center justify-center mx-auto">
+    <div class="w-16 h-16 bg-rose-50 border border-rose-100 text-rose-500 rounded-full flex items-center justify-center mx-auto">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
       </svg>
@@ -167,8 +165,8 @@
 
     <!-- Success Message -->
     <div class="space-y-2">
-      <h3 class="serif-title text-2xl font-bold text-stone-100">Bestelling Genoteerd!</h3>
-      <p class="text-xs text-stone-400 font-light leading-relaxed">
+      <h3 class="serif-title text-2xl font-bold text-stone-900">Bestelling Genoteerd!</h3>
+      <p class="text-xs text-stone-500 font-light leading-relaxed">
         De e-mail met de bestelgegevens is met succes naar jouw Gmail-adres gestuurd.
       </p>
     </div>
@@ -180,10 +178,10 @@
         id="success-whatsapp-btn" 
         href="" 
         target="_blank" 
-        class="w-full bg-[#25D366] hover:bg-[#20ba5a] active:scale-[0.98] text-stone-950 font-bold rounded-2xl py-4 text-sm flex items-center justify-center space-x-2 transition shadow-lg shadow-[#25D366]/10"
+        class="w-full bg-[#25D366] hover:bg-[#20ba5a] active:scale-[0.98] text-white font-bold rounded-2xl py-4 text-sm flex items-center justify-center space-x-2 transition shadow-lg shadow-[#25D366]/10"
       >
         <!-- WhatsApp SVG Icon -->
-        <svg class="w-4 h-4 fill-stone-950" viewBox="0 0 24 24">
+        <svg class="w-4.5 h-4.5 fill-white" viewBox="0 0 24 24">
           <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.753-1.458L0 24zm6.59-4.846c1.785 1.058 3.565 1.61 5.357 1.611 5.487 0 10.931-4.453 10.934-9.93.003-2.652-2.11-5.143-3.984-7.015C17.078 1.948 14.618 1.15 12.016 1.151c-5.492 0-9.941 4.456-9.945 9.935-.001 2.02.528 3.993 1.536 5.73l-.994 3.633 3.73-.974.314.186z"/>
         </svg>
         <span>Open WhatsApp Chat</span>
@@ -192,7 +190,7 @@
       <!-- Terug naar Dashboard -->
       <button 
         onclick="finishOrder()" 
-        class="w-full bg-stone-850 hover:bg-stone-800 text-stone-200 font-semibold rounded-2xl py-4 text-sm transition"
+        class="w-full bg-stone-100 hover:bg-stone-250 hover:bg-stone-200/60 text-stone-600 font-semibold rounded-2xl py-4 text-sm transition"
       >
         Terug naar dashboard
       </button>
@@ -296,7 +294,7 @@
     
     if (orderItems.length === 0) {
       listContainer.innerHTML = `
-        <div class="text-center py-6 text-stone-550 text-xs font-light">
+        <div class="text-center py-6 text-stone-400 text-xs font-light">
           Nog geen producten toegevoegd aan deze bestelling.
         </div>
       `;
@@ -312,19 +310,19 @@
       total += itemTotal;
 
       html += `
-        <div class="bg-stone-950/60 border border-stone-850 rounded-2xl p-3.5 flex items-center justify-between">
+        <div class="bg-stone-50 border border-stone-200/60 rounded-2xl p-3.5 flex items-center justify-between">
           <div class="space-y-0.5 flex-grow pr-3">
-            <h4 class="text-xs font-bold text-stone-200 truncate">${item.title}</h4>
-            <div class="flex items-center space-x-3 text-[10px] text-stone-500 font-light">
-              <span>Aantal: <strong class="text-stone-300">${item.quantity}</strong></span>
-              <span>Kleur: <strong class="text-stone-300">${item.color}</strong></span>
-              <span class="text-amber-500/80">€${itemTotal.toFixed(2)}</span>
+            <h4 class="text-xs font-bold text-stone-800 truncate">${item.title}</h4>
+            <div class="flex items-center space-x-3 text-[10px] text-stone-400 font-light">
+              <span>Aantal: <strong class="text-stone-700 font-bold">${item.quantity}</strong></span>
+              <span>Kleur: <strong class="text-stone-700 font-bold">${item.color}</strong></span>
+              <span class="text-rose-500 font-bold">€${itemTotal.toFixed(2)}</span>
             </div>
           </div>
           <button 
             type="button" 
             onclick="removeProductItem(${index})" 
-            class="text-[10px] text-red-400 bg-red-950/20 hover:bg-red-950/40 border border-red-900/30 w-7 h-7 rounded-full flex items-center justify-center transition active:scale-90"
+            class="text-red-500 bg-red-50 hover:bg-red-100/60 border border-red-100 w-8 h-8 rounded-full flex items-center justify-center transition active:scale-90"
           >
             <!-- Garbage Can SVG -->
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

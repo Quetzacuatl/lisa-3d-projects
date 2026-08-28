@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl" class="h-full bg-stone-950 text-stone-100">
+<html lang="nl" class="h-full bg-stone-50 text-stone-900">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +12,10 @@
         extend: {
           colors: {
             brand: {
-              gold: '#D4AF37',
-              primary: '#1c1917',
-              accent: '#f59e0b',
+              peach: '#FFFaf0',
+              rose: '#f43f5e',
+              coral: '#f43f5e',
+              amber: '#f59e0b',
             }
           },
           fontFamily: {
@@ -46,17 +47,17 @@
     }
   </style>
 </head>
-<body class="h-full flex flex-col bg-stone-950 text-stone-200 antialiased overflow-x-hidden selection:bg-amber-500/20 selection:text-amber-300">
+<body class="h-full flex flex-col bg-gradient-to-b from-[#fdfbf7] via-[#fff5f5] to-[#f4f2ff] text-stone-850 antialiased overflow-x-hidden selection:bg-rose-500/10 selection:text-rose-600">
   
   <!-- Header / Navigatie (Geoptimaliseerd voor mobiel) -->
-  <header class="border-b border-stone-900 bg-stone-950/85 backdrop-blur-lg sticky top-0 z-40">
+  <header class="border-b border-rose-100/40 bg-white/60 backdrop-blur-xl sticky top-0 z-40">
     <div class="max-w-md mx-auto px-6 py-4 flex items-center justify-between">
       <a href="/" class="flex items-center space-x-2">
-        <span class="serif-title text-2xl font-bold tracking-tight text-stone-100">Lisa<span class="text-amber-500">.</span></span>
-        <span class="text-[9px] uppercase tracking-widest bg-stone-900 text-stone-400 px-2 py-0.5 rounded font-mono font-bold">3D Studio</span>
+        <span class="serif-title text-2xl font-bold tracking-tight text-stone-900">Lisa<span class="text-rose-500">.</span></span>
+        <span class="text-[9px] uppercase tracking-widest bg-amber-100/60 text-amber-800 px-2 py-0.5 rounded-full font-mono font-bold">3D Studio</span>
       </a>
       
-      <a href="/admin" class="text-xs text-stone-400 hover:text-stone-100 font-mono tracking-widest uppercase transition bg-stone-900 hover:bg-stone-850 px-3 py-1.5 rounded-full border border-stone-800">
+      <a href="/admin" class="text-xs text-stone-600 hover:text-stone-950 font-mono tracking-widest uppercase transition bg-white/80 hover:bg-stone-50 px-3.5 py-1.5 rounded-full border border-stone-200/60 shadow-sm">
         Admin
       </a>
     </div>
